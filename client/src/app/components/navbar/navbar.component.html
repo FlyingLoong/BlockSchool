@@ -8,24 +8,29 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="home">
-        <img class="brand-image" alt="BlockSchool" src="../../../assets/BlockSchool-Logo-NonStack.png">
+      <a class="navbar-brand" routerLink="/home">
+        <img class="brand-image" alt="BlockSchool" src="../../../assets/images/BlockSchool-Logo-NonStack.png">
       </a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav navbar-right">
         <li class="active"><a href="#">Mission <span class="sr-only">(current)</span></a></li>
         <li><a href="#">Curriculum</a></li>
         <li><a href="#">Teachers</a></li>
         <li><a href="#">Pricing</a></li>
         <li><a href="#">FAQ</a></li>
         <li><a href="#">Contact Us</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
+
+        <li class="navbar-spacer"></li>
+
         <li><a href="#">Sign in</a></li>
-        <li><a class="btn btn-primary" href="#">Sign up</a></li>
+        <li>
+          <form class="navbar-form">
+            <a class="btn btn-info" href="#">Sign up</a>
+          </form>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
