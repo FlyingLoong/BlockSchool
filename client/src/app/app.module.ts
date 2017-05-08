@@ -5,6 +5,8 @@ import { HttpModule } from '@angular/http';
 
 import { routes } from './app.routes';
 
+import { AuthService } from './services/auth.service';
+
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
@@ -33,7 +35,12 @@ import { SignupComponent } from './components/signup/signup/signup.component';
     HttpModule,
     routes
   ],
-  providers: [],
+  providers: [
+    {
+      provide: 'auth',
+      useClass: AuthService
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

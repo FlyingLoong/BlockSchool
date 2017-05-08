@@ -13,6 +13,6 @@ let userSchema = mongoose.Schema(
     }
 );
 
-let userModel = mongoose.Model("userModel", userSchema);
+let userModel = mongoose.model("userModel", userSchema);
 
 module.exports = userModel;

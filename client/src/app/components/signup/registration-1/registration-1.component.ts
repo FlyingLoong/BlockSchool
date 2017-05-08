@@ -1,4 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { User } from './../../../models/user.model';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Router } from '@angular/router';
+
+const DEFAULT_USER: User = Object.freeze({
+  email: "",
+  password: "",
+  parentName: "",
+  relationship: "",
+  childName: "",
+  childAge: 5,
+  childGender: "",
+  childBirthday: "",
+  childInterest: ""
+});
 
 @Component({
   selector: 'app-registration-1',
@@ -7,13 +21,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Registration1Component implements OnInit {
 
-  constructor() { }
+  userInfo: User = Object.assign({}, DEFAULT_USER) ;
+
+  constructor(@Inject('auth') private auth, private _router: Router) { }
 
   ngOnInit() {
+    this.userInfo.email = this.auth.user.email;
+    this.userInfo.password = this.auth.user.password;
   }
 
   nextStep() : void{
-    console.log("next step is called!");
+    console.log(this.userInfo.email);
+    this.auth.user.email = this.userInfo.email;
+    this.auth.user.password = this.userInfo.password;
+    this._router.navigate(['signUp/registration-2']);
   }
 
 }
