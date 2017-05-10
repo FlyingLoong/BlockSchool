@@ -7,6 +7,8 @@ import { routes } from './app.routes';
 
 import { AuthService } from './services/auth.service';
 
+import { CalendarComponent } from 'angular2-fullcalendar/src/calendar/calendar';
+
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
@@ -19,6 +21,7 @@ import { SignupComponent } from './components/signup/signup/signup.component';
 
 @NgModule({
   declarations: [
+    CalendarComponent,
     AppComponent,
     NavbarComponent,
     HomeComponent,

@@ -1,3 +1,11 @@
-<p>
-  registration-3 works!
-</p>
+<div>
+  <h3>Pick Date & Time</h3>
+  <!--
+  <p>Planning Meeting with {{teacher.name}}</p>
+  -->
+  <hr>
+  <p>All times are in <select id="timezone-selector"></select></p>
+  <div>
+    <angular2-fullcalendar id="freeTrailScheduler" [options]="calendarOptions"></angular2-fullcalendar>
+  </div>
+</div>
