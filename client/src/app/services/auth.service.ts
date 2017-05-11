@@ -29,10 +29,4 @@ export class AuthService {
                         .then((res: Response) => {return res.json()})
                         .catch()
   }
-
-  //getScheduleEvents(): Promise<> {}
-
-  addScheduleEvents(events: Object[]): void {}
-
-  deleteScheduleEvents(events: Object[]): void {}
 }

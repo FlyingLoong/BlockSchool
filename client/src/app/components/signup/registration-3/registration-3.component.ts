@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Inject, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as $ from 'jquery';
 
 @Component({
@@ -11,7 +12,7 @@ export class Registration3Component implements OnInit {
   calendarOptions: any ={}
   calendarEvents: any[] = [];
 
-  constructor() { }
+  constructor(@Inject('schedule') private schedule, private _router: Router) { }
 
   ngOnInit() {
   }
@@ -36,12 +37,20 @@ export class Registration3Component implements OnInit {
     console.log(date.format());
     let start = date.format();
     let event: any = {
+      teacherEmail: "..",
       title: "Scheduled",
       start: date.format()
     }
     this.calendarOptions.events.push(event);
     //this.calendarEvents.push("1");
     $("#freeTrailScheduler").fullCalendar('renderEvent', event, true);
+    this.schedule.addScheduleEvent(event)
+                .then(event => {
+                  this._router.navigate(['home']);
+                })
+                .catch(err => {
+                  console.log("cant add the schedule!");
+                })
   }
 
   clickEvent(calEvent, jsEvent, view): void {

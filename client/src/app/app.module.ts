@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { routes } from './app.routes';
 
 import { AuthService } from './services/auth.service';
+import { ScheduleService } from './services/schedule.service';
 
 import { CalendarComponent } from 'angular2-fullcalendar/src/calendar/calendar';
 
@@ -42,6 +43,10 @@ import { SignupComponent } from './components/signup/signup/signup.component';
     {
       provide: 'auth',
       useClass: AuthService
+    },
+    {
+      provide: 'schedule',
+      useClass: ScheduleService
     }
   ],
   bootstrap: [AppComponent]
