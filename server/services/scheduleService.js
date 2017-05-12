@@ -8,6 +8,18 @@ let addSchedule = function(event) {
     })
 }
 
+let getSchedules = function(teacherEmail) {
+    return  new Promise((resolve, reject) => {
+        scheduleModel.find({teacherEmail: teacherEmail}, function(err, schedules) {
+            if (err) {
+                reject("No scheduled classes!");
+            } else {
+                resolve(schedules)
+            }
+        })
+    })
+}
+
 module.exports = {
     addSchedule: addSchedule
 }
