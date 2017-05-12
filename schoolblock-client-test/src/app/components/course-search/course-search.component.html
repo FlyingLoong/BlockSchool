@@ -1,0 +1,122 @@
+<div class="container">
+  <div class="btn-group">
+    <!--"Search Course" Button triggers corresponding modal -->
+    <!-- "Search Course Path: Project -> Teacher -> Course"-->
+    <span>
+      <button type="button" class="btn btn-info" (click)="searchMyBookedCourses()">
+        <span class ="glyphicon glyphicon-ok-circle" arial-hidden="true"></span> My Course
+      </button>
+    </span>
+    <span>
+      <button type="button" class="{{'btn btn-'+bookingButtonColor}}" *ngIf="ActiveBookingButton()" (click)="bookingButtonClick()">
+        <span class ="glyphicon glyphicon-plus-sign" arial-hidden="true"></span> Booking
+      </button>
+    </span>
+    <span>
+      <button type="button" class="btn btn-info" (click)="initSearchModal()" data-toggle="modal" data-target="#exampleModalSearchCourse">
+        <span class ="glyphicon glyphicon-search" arial-hidden="true"></span> Search Course
+      </button>
+    </span>
+    <span class="label label-info">{{projectNameForLabel}}</span>
+    <span class="label label-info">{{teacherNameForLabel}}</span>
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="exampleModalSearchCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalSearchCourseTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-info">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="exampleModalSearchCourseTitle">
+                <span class ="glyphicon glyphicon-search" arial-hidden="true"></span> Search Your Course
+              </h4>
+          </div>
+          <div class="modal-body">
+            <form #formRef="ngForm">
+              <!--Select Project-->
+              <div class="form-group">
+                <label for="project">Your Project</label>
+                <select class="form-control" id="project"
+                        name="project" [(ngModel)]="searchFilter.project_id" (change)="searchTeachersByProject()">
+                  <option *ngFor="let projectForSearch of projectsForSearch" [value]="projectForSearch.id">
+                    {{projectForSearch.name}}
+                  </option>
+                </select>
+              </div>
+              <!--Select Teacher-->
+              <div class="form-group">
+                <label for="teacher">Teacher</label>
+                <select class="form-control" id="teacher"
+                        name="teacher" [(ngModel)]="searchFilter.teacher_id">
+                  <option *ngFor="let teacherForSearch of teachersForSearch" [value]="teacherForSearch.id">
+                    {{teacherForSearch.name}}
+                  </option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <!--Cancel or Search-->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-info" data-dismiss="modal" (click)="searchCoursesByTeacher()" >Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--"Book Course" Button triggers corresponding modal -->
+  <div class="modal fade" id="bookCourseModal" tabindex="-1" role="dialog" aria-labelledby="bookCourseModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-success">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="bookCourseModalTitle">
+            <span class ="glyphicon glyphicon-tag" arial-hidden="true"></span> Book Your Course Now
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p><span class ="glyphicon glyphicon-blackboard" arial-hidden="true"></span> Project: {{newCourse.project_name}}</p>
+          <p><span class ="glyphicon glyphicon-user" arial-hidden="true"></span> Teacher: {{newCourse.teacher_name}}</p>
+          <p><span class ="glyphicon glyphicon-time" arial-hidden="true"></span> Time: {{startForBookingModal}} <span class ="glyphicon glyphicon-arrow-right" arial-hidden="true"></span> {{endForBookingModal}}</p>
+          <hr>
+          <!--Select moduleUnit-->
+          <div class="form-group">
+            <label for="moduleUnit">Select Your Module</label>
+            <select class="form-control" id="moduleUnit"
+                    name="moduleUnit" [(ngModel)]="newCourse.title">
+              <option *ngFor="let moduleUnit of modulesUnits" [value]="moduleUnit.title">
+                {{moduleUnit.title}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <!--Cancel or Submit-->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="bookCourse()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--"time is taken" modal) -->
+  <div class="modal fade" id="timeIsTakenModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-warning">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">
+            <span class ="glyphicon glyphicon-exclamation-sign" arial-hidden="true"></span> Sorry!
+          </h4>
+        </div>
+        <div class="modal-body">
+          <p>The time has been taken, please try other time.</p>
+        </div>
+        <!--Cancel-->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="displayBookingCalendar()">Cancel</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+  <hr>
+  <div id='calendar'></div>
+</div>
