@@ -38,9 +38,9 @@ var personSchema = new Schema({
     telephone: String,
     sex: String,
     age: String,
+    contact: {tel: String, wechat: String},
     projects: [projectSchema],
-    courses: [courseSchema],
-    contact: {tel: String, wechat: String}
+    courses: [courseSchema]
 });
 
 var Person = mongoose.model("Person", personSchema);

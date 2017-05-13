@@ -19,12 +19,12 @@ var DEFAULT_COURSE: Course = Object.freeze({
   grade: "",
   desc: "",
   type: "",
-  project_name: "",
   project_id: "",
-  teacher_name: "",
+  project_name: "",
   teacher_id: "",
-  student_name: "",
+  teacher_name: "",
   student_id: "",
+  student_name: "",
   start: null,
   end: null,
   start_unix: null,
@@ -168,18 +168,14 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
       selectable: this.selectableOption,
       select: function(start, end, allDay) {
-        //self.OpenModal();
-
-        //console.log($('#calendar').fullCalendar('getView').name ==='agendaWeek');
-        console.log("bookingButton: "+self.bookingButtonState);
-        //console.log("selectableOption: "+self.selectableOption);
+        // console.log("bookingButton: "+self.bookingButtonState);
         // only when current view is agendaWeek and bookingButton is on
         if($('#calendar').fullCalendar('getView').name ==='agendaWeek' && self.bookingButtonState){
           // when click on a calendar cell in agendaWeek, immediately record the time and invoke bookCourse() method
           // timezone: 'local', so the date on calendar is the local time.
           // both "start" and "end" still store UTC though always put the corresponding local time on the calendar
+          // p.s. the UTC time will be stored in Mlab
           // invoke this.openBookingModal() method
-          console.log("tango");
           self.openBookingModal(start,end);
         }
       },
@@ -196,9 +192,6 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         self.dayRender(date, cell);
       },
       eventClick: function (calEvent, view) {
-        const el = this; // get the element
-        console.log("can not book !");
-
         $('#calendar span.fc-title').css({
           'color':'#5bc0de',
         });
@@ -285,15 +278,8 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     const eventClient = $('#calendar').fullCalendar('clientEvents');
     eventClient[3].title = 'xxx';
     for (let i = 0 ; i < eventClient.length ; i++) {
-      // console.log(eventClient[i]);
-      // console.log('_id: ' + eventClient[i]._id);
     }
-    // $('#calendar').fullCalendar('updateEvent', eventClient[3]);
-    // console.log('Add');
-    // this.data.addEvent(this.newEvent);
   }
-
-
 
   changeCSS(element: any, key: string): void{
     $(element).css('background-color', this.cssMap[key]['background-color']);
@@ -410,43 +396,40 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     // goto agendaWeek View
     $('#calendar').fullCalendar('changeView', 'agendaWeek');
 
-    //if($('#calendar').fullCalendar('getView').name ==='agendaWeek'){
-     // console.log('tango');
-     // for (let i = 0 ; i < this.courses.length ; i++){
-      //  let time = moment(this.courses[i].start).utc().format('HH:mm:ss');
-     //   $("tr").find(`[data-time='${time}']`).css({'background-color':'#777777',});
-    //  }
-    // }
   }
 
   openBookingModal(start,end){
-    // get timestamp
-    let start_unix = start.valueOf();
-    let end_unix = end.valueOf;
+    // get timestamp and change the type to Number
+    let start_unix = +start.valueOf();
+    let end_unix = +end.valueOf();
+    console.log(start_unix.valueOf());
+    console.log(end_unix.valueOf());
+    if (this.data.checkTimeNotTaken(start_unix,end_unix,this.courses)) {
+      // Only when the time is not taken, you can book your course
+      this.newCourse.grade = "";
+      this.newCourse.desc = "";
+      this.newCourse.type = "private";
+      this.newCourse.project_id = this.projectIdForLabel;
+      this.newCourse.project_name = this.projectNameForLabel;
+      this.newCourse.teacher_id = this.teacherIdForLabel;
+      this.newCourse.teacher_name = this.teacherNameForLabel;
+      this.newCourse.student_id = this.person_id;
+      this.newCourse.student_name = this.person_name;
+      this.newCourse.start = start;
+      this.newCourse.end = end;
+      this.newCourse.start_unix = start_unix;
+      this.newCourse.end_unix = end_unix;
+      this.newCourse.booked = true;
 
-    if(this.data.checkTimeNotTaken(start_unix,end_unix,this.courses)){
-    this.newCourse.grade = "";
-    this.newCourse.desc = "";
-    this.newCourse.type = "private";
-    this.newCourse.project_id = this.projectIdForLabel;
-    this.newCourse.project_name = this.projectNameForLabel;
-    this.newCourse.teacher_id = this.teacherIdForLabel;
-    this.newCourse.teacher_name = this.teacherNameForLabel;;
-    this.newCourse.student_id = this.person_id;
-    this.newCourse.student_name = this.person_name;
-    this.newCourse.start = start;
-    this.newCourse.end = end;
-    this.newCourse.start_unix = start_unix;
-    this.newCourse.end_unix = end_unix;
-    this.newCourse.booked = true;
-
-    // open booking modal
+      // open booking modal
       this.startForBookingModal = start.format('MMMM Do YYYY, h:mm:ss a');
       this.endForBookingModal = end.format('MMMM Do YYYY, h:mm:ss a');
-    jQuery('#bookCourseModal').modal('show');
+      jQuery('#bookCourseModal').modal('show');
 
     } else {
-      jQuery('#timeIsTakenModal').modal('show');
+      jQuery('#invalidTimeModal').modal('show');
+
+
     }
   }
 

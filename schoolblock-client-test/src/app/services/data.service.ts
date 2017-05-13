@@ -12,7 +12,6 @@ export class DataService {
 
   private coursesSource = new BehaviorSubject<Course[]>([]);
   private projectsSource = new BehaviorSubject<Project[]>([]);
-  private personsSourceAll = new BehaviorSubject<Course[]>([]);
   private teachersSource = new BehaviorSubject<Person[]>([]);
 
   constructor(private http: Http) { }
@@ -53,7 +52,6 @@ export class DataService {
     return this.coursesSource.asObservable();
   }
 
-
   checkTimeNotTaken(start_unix: number,end_unix: number,courses: Course[]): boolean{
     let isTaken = false;
     for(let course of courses){
@@ -77,9 +75,6 @@ export class DataService {
     console.log("The time has not been taken, you can book.");
     return true;
   };
-
-
-
 
   bookCourseForPerson(course: Course, role: string, person_id: string): Promise<Course>{
     let headers = new Headers({'content-type':'application/json'});

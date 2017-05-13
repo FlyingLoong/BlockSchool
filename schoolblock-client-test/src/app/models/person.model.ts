@@ -9,7 +9,7 @@ export class Person {
   telephone: string;
   sex: string;
   age: string;
-  projects: [Project];
-  courses: [Course];
   contact: { tel: string, wechat: string }
+  projects: [Project];
+  courses: [Course]
 }
