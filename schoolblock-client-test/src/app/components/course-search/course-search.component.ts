@@ -192,6 +192,12 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         self.dayRender(date, cell);
       },
       eventClick: function (calEvent, view) {
+        //those courses I booked can only be canceled
+        if(self.bookingButtonState && (calEvent.student_id === self.person_id)){
+          jQuery('#cancelBookedCourseModal').modal('show');
+        }
+
+
         $('#calendar span.fc-title').css({
           'color':'#5bc0de',
         });
@@ -233,13 +239,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   }
 
   eventRender(calEvent: any, element: any, view: any) {
-
-    // change those events whose student_id match with mine
     if (calEvent.student_id !== this.person_id) {
-      // console.log("calEvent.student_id"+calEvent.student_id);
-      // console.log("this.person_id"+this.person_id);
       this.changeCSS(element, 'course-normal');
     } else {
+      // change those events whose student_id match with mine
       this.changeCSS(element, 'course-booking');
     };
 
@@ -348,6 +351,13 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     let teacher_id = this.searchFilter.teacher_id;
     this.subscriptionCourses = this.data.getCoursesByPerson(teacher_id,'teacher')
       .subscribe(courses => {
+        // hide course information of others and replace by "Taken"
+        for(let course of courses){
+          if(course.student_id !== this.person_id){
+            course.title = 'Taken'
+          }
+        }
+
         // finally update courses
         this.courses = courses;
 
@@ -360,6 +370,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         // invoke displayBookingCalendar() method
         this.displayBookingCalendar();
       });
+
   }
 
   // update search label ( project -> teacher )
@@ -402,8 +413,6 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     // get timestamp and change the type to Number
     let start_unix = +start.valueOf();
     let end_unix = +end.valueOf();
-    console.log(start_unix.valueOf());
-    console.log(end_unix.valueOf());
     if (this.data.checkTimeNotTaken(start_unix,end_unix,this.courses)) {
       // Only when the time is not taken, you can book your course
       this.newCourse.grade = "";
@@ -494,6 +503,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     this.teacherNameForLabel = "";
   }
 
+
+  removeCourse(){
+    // update the Calendar
+    this.displayBookingCalendar();
+  }
 
 }
 

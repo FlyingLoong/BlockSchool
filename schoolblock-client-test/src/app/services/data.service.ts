@@ -67,12 +67,9 @@ export class DataService {
         isTaken = true;
     }
 
-    console.log("isTaken"+isTaken);
     if(isTaken){
-      console.log("The time has been taken!");
       return false;
     }
-    console.log("The time has not been taken, you can book.");
     return true;
   };
 
