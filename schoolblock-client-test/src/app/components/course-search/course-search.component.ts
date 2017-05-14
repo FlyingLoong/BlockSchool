@@ -8,23 +8,23 @@ import { ModuleUnit } from '../../models/module-unit.model';
 import { Project } from '../../models/project.model';
 import { Person } from '../../models/person.model';
 import { Filter } from '../../models/filter.model';
-import { Subscription } from "rxjs/Subscription";
-import { Modal } from "bootstrap/js/modal.js"
+import { Subscription } from 'rxjs/Subscription';
+import { Modal } from 'bootstrap/js/modal.js';
 
 // Still can recognize jQuery even after bundle
 declare var jQuery: any;
-var DEFAULT_COURSE: Course = Object.freeze({
-  id: "",
-  title: "",
-  grade: "",
-  desc: "",
-  type: "",
-  project_id: "",
-  project_name: "",
-  teacher_id: "",
-  teacher_name: "",
-  student_id: "",
-  student_name: "",
+const DEFAULT_COURSE: Course = Object.freeze({
+  id: '',
+  title: '',
+  grade: '',
+  desc: '',
+  type: '',
+  project_id: '',
+  project_name: '',
+  teacher_id: '',
+  teacher_name: '',
+  student_id: '',
+  student_name: '',
   start: null,
   end: null,
   start_unix: null,
@@ -42,18 +42,18 @@ const self = this;
 })
 export class CourseSearchComponent implements OnInit, AfterViewInit {
 
-  person_name: string = '';
-  person_id: string = '';
-  person_role: string = '';
+  person_name = '';
+  person_id = '';
+  person_role = '';
 
-  search_id: string = '';
-  search_role: string = '';
-  updateURL: string = '';
+  search_id = '';
+  search_role = '';
+  updateURL = '';
 
   searchFilter: Filter = {
-    teacher_id: "",
-    project_id: "",
-    module_unit_id: ""
+    teacher_id: '',
+    project_id: '',
+    module_unit_id: ''
   };
 
   projectIdForLabel = '';
@@ -76,10 +76,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   subscriptionCourses: Subscription;
 
   newCourse: Course = Object.assign({}, DEFAULT_COURSE);
-  courseIdRemoving: string = '';
+  courseIdRemoving = '';
 
-  startForBookingModal = "";
-  endForBookingModal = "";
+  startForBookingModal = '';
+  endForBookingModal = '';
 
   myBookedCourses: Course[] = [];
   subscriptionMyBookedCourses: Subscription;
@@ -94,31 +94,31 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   calEventArray = [];
   eventElementArray = [];
   selectedEventList = new Map();
-  dayRenderMode: string = "";
+  dayRenderMode = '';
 
   bookingButtonState = false;
-  bookingButtonColor = "info";
+  bookingButtonColor = 'info';
 
   cssMap = {
-    'course-booking':{
-      'background-color':'#d2fd35',
-      'border-color':'#5bc0de'
+    'course-booking': {
+      'background-color': '#d2fd35',
+      'border-color': '#5bc0de'
     },
-    'course-normal':{
-      'background-color':'#ffffff',
-      'border-color':'#5bc0de'
+    'course-normal': {
+      'background-color': '#ffffff',
+      'border-color': '#5bc0de'
     },
-    'course-editing':{
-      'background-color':'#FECE55',
-      'border-color':'#c9c9c9'
+    'course-editing': {
+      'background-color': '#FECE55',
+      'border-color': '#c9c9c9'
     },
-    'course-removing':{
-      'background-color':'#ffffff',
-      'border-color':'#c42933'
+    'course-removing': {
+      'background-color': '#ffffff',
+      'border-color': '#c42933'
     }
   };
 
-  constructor( @Inject('data') private data, private router: Router, @Inject("authGuard") private authGuard ) { }
+  constructor( @Inject('data') private data, private router: Router, @Inject('authGuard') private authGuard ) { }
 
   ngOnInit() {
     // get my profile
@@ -135,7 +135,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     this.changeTheme();
 
     // Observe my booked courses
-    //this.searchMyBookedCourses();
+    // this.searchMyBookedCourses();
   }
   courseCalendar(): void {
     // store " this " -> " self "
@@ -171,13 +171,13 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
       select: function(start, end, allDay) {
         // console.log("bookingButton: "+self.bookingButtonState);
         // only when current view is agendaWeek and bookingButton is on
-        if($('#calendar').fullCalendar('getView').name ==='agendaWeek' && self.bookingButtonState){
+        if ($('#calendar').fullCalendar('getView').name === 'agendaWeek' && self.bookingButtonState) {
           // when click on a calendar cell in agendaWeek, immediately record the time and invoke bookCourse() method
           // timezone: 'local', so the date on calendar is the local time.
           // both "start" and "end" still store UTC though always put the corresponding local time on the calendar
           // p.s. the UTC time will be stored in Mlab
           // invoke this.openBookingModal() method
-          self.openBookingModal(start,end);
+          self.openBookingModal(start, end);
         }
       },
       // eventRender( for each event )
@@ -193,19 +193,19 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         self.dayRender(date, cell);
       },
       eventClick: function (calEvent, view) {
-        //those courses I booked can only be canceled
-        if(self.bookingButtonState && (calEvent.student_id === self.person_id)){
+        // those courses I booked can only be canceled
+        if (self.bookingButtonState && (calEvent.student_id === self.person_id)) {
           self.courseIdRemoving = calEvent.id;
           jQuery('#cancelBookedCourseModal').modal('show');
         }
 
 
         $('#calendar span.fc-title').css({
-          'color':'#5bc0de',
+          'color': '#5bc0de',
         });
         // event time
         $('#calendar span.fc-time').css({
-          'color':'#5bc0de',
+          'color': '#5bc0de',
         });
 
       },
@@ -231,11 +231,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
       console.log('Book now!');
       // when turn on the booking-button, goto the agendaWeek View
       $('#calendar').fullCalendar('changeView', 'agendaWeek');
-      return this.bookingButtonColor="success";
+      return this.bookingButtonColor = 'success';
     } else {
       this.bookingButtonState = false;
       console.log('Can not book!');
-      return this.bookingButtonColor="info";
+      return this.bookingButtonColor = 'info';
     };
 
   }
@@ -254,14 +254,14 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
   }
   dayRender(date: any, cell: any) {
-    //when booking button is on, switch to the booking theme
+    // when booking button is on, switch to the booking theme
     if (!this.bookingButtonState) {
       $(cell).css('background-color', '#ffffff');
     } else {
       $(cell).css('background-color', '#dff0d8');
     };
     // render today
-    if (date.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')){
+    if (date.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
       $(cell).css('background-color', '#f6ebbc');
     };
     // if the day has no booked course, remove the tick sign.
@@ -286,77 +286,91 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     }
   }
 
-  changeCSS(element: any, key: string): void{
+  changeCSS(element: any, key: string): void {
     $(element).css('background-color', this.cssMap[key]['background-color']);
     $(element).css('border-color', this.cssMap[key]['border-color']);
   }
 
-  changeTheme(): void{
+  changeTheme(): void {
     // Month Year
     $('#calendar h2').css('color', '#777777');
     // week
     $('#calendar span').css({
-      'color':'#777777',
+      'color': '#777777',
     });
     // day
     $('#calendar span.fc-day-number').css({
-      'color':'#777777',
+      'color': '#777777',
     });
   }
 
-  paintEvents(): void{
+  paintEvents(): void {
     // event title
     $('#calendar span.fc-title').css({
-      'color':'#5bc0de',
+      'color': '#5bc0de',
     });
     // event time
     $('#calendar span.fc-time').css({
-      'color':'#5bc0de',
+      'color': '#5bc0de',
     });
   }
 
-  // Press "Search Course" button to activate the search modal, then:
+  // Press "Search" button to activate the search modal, then:
   // 1.immediately initiate the projects and teachers list
-  // 2.invoke searchMyProjects() method
-  initSearchModal(): void{
+  // 2.immediately initiate the searchFilter
+  // 3.invoke searchMyProjects() method
+  initSearchModal(): void {
+    // 1
     this.projectsForSearch = [];
     this.teachersForSearch = [];
+    // 2
+    this.searchFilter.project_id = '';
+    this.searchFilter.teacher_id = '';
+    this.searchFilter.module_unit_id = '';
+    // 3
     this.searchMyProjects();
   }
 
   // Get all of your projects and update the projects list in search modal
-  searchMyProjects(): void{
+  searchMyProjects(): void {
     this.projectsForSearch = [];
-    this.subscriptionProjects = this.data.getProjectsByPerson(this.person_id,'student')
+    this.subscriptionProjects = this.data.getProjectsByPerson(this.person_id, 'student')
       .subscribe(projects => {
         this.projectsForSearch = projects
       });
   }
 
   // when select project in modal , immediately update the corresponding teachers list
-  searchTeachersByProject(){
+  searchTeachersByProject() {
     this.teachersForSearch = [];
     let project_id = this.searchFilter.project_id;
     this.subscriptionTeachers = this.data.getTeachersByProject(project_id)
       .subscribe(teachers => {
-        this.teachersForSearch = teachers
+        this.teachersForSearch = teachers;
       });
+  }
+  // only when update teachers, active teacher select list
+  activeTeacherSelectList(): boolean {
+    if (this.teachersForSearch.length !== 0) {
+      return true;
+    }
+    return false;
   }
 
   // when press "Search" button in modal, immediately get all of the teacher's courses
-  searchCoursesByTeacher(): void{
+  searchCoursesByTeacher(): void {
     // firstly update projects and teachers
     this.projects = this.projectsForSearch;
     this.teachers = this.teachersForSearch;
 
     // search courses by teacher
     let teacher_id = this.searchFilter.teacher_id;
-    this.subscriptionCourses = this.data.getCoursesByPerson(teacher_id,'teacher')
+    this.subscriptionCourses = this.data.getCoursesByPerson(teacher_id, 'teacher')
       .subscribe(courses => {
         // hide course information of others and replace by "Taken"
-        for(let course of courses){
-          if(course.student_id !== this.person_id){
-            course.title = 'Taken'
+        for ( let course of courses){
+          if (course.student_id !== this.person_id) {
+            course.title = 'Taken';
           }
         }
 
@@ -376,7 +390,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   }
 
   // update search label ( project -> teacher )
-  changeSearchLabel(): void{
+  changeSearchLabel(): void {
   this.projectIdForLabel = this.searchFilter.project_id;
   this.teacherIdForLabel = this.searchFilter.teacher_id;
   this.projectNameForLabel = this.projectsForSearch.find(value => value.id === this.searchFilter.project_id).name;
@@ -384,15 +398,15 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 }
 
   // when both project and teacher search labels exist, active the booking button
-  ActiveBookingButton(): boolean{
-    if(this.projectIdForLabel && this.teacherIdForLabel){
-      return true
+  ActiveBookingButton(): boolean {
+    if (this.projectIdForLabel && this.teacherIdForLabel) {
+      return true;
     }
-    return false
+    return false;
   }
 
 
-  displayBookingCalendar(){
+  displayBookingCalendar() {
     console.log('Updating Calendar...');
     // after search you can select the cell
     this.selectableOption = true;
@@ -412,15 +426,15 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
   }
 
-  openBookingModal(start,end){
+  openBookingModal(start, end){
     // get timestamp and change the type to Number
     let start_unix = +start.valueOf();
     let end_unix = +end.valueOf();
-    if (this.data.checkTimeNotTaken(start_unix,end_unix,this.courses)) {
+    if (this.data.checkTimeNotTaken(start_unix, end_unix, this.courses)) {
       // Only when the time is not taken, you can book your course
-      this.newCourse.grade = "";
-      this.newCourse.desc = "";
-      this.newCourse.type = "private";
+      this.newCourse.grade = '';
+      this.newCourse.desc = '';
+      this.newCourse.type = 'private';
       this.newCourse.project_id = this.projectIdForLabel;
       this.newCourse.project_name = this.projectNameForLabel;
       this.newCourse.teacher_id = this.teacherIdForLabel;
@@ -446,21 +460,21 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   }
 
   // when press "Submit" button in booking modal
-  bookCourse(){
+  bookCourse() {
     console.log(this.newCourse);
-    this.data.bookCourseForPerson(this.newCourse,"student",this.person_id)
+    this.data.bookCourseForPerson(this.newCourse, 'student', this.person_id)
       .then((course) => {
         // Once succeed, should update the calendar
         this.searchCoursesByTeacher();
       })
       .catch(error => console.log(error.body));
-    this.newCourse= Object.assign({},DEFAULT_COURSE);
+    this.newCourse = Object.assign({}, DEFAULT_COURSE);
   }
 
 
-  searchMyBookedCourses(): void{
+  searchMyBookedCourses(): void {
     this.myBookedCourses = [];
-    this.subscriptionMyBookedCourses = this.data.getCoursesByPerson(this.person_id,'student')
+    this.subscriptionMyBookedCourses = this.data.getCoursesByPerson(this.person_id, 'student')
       .subscribe(courses => {
         this.myBookedCourses = courses;
         this.courses = this.myBookedCourses;
@@ -473,11 +487,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
 
 
-  displayMyCoursesCalendar(){
+  displayMyCoursesCalendar() {
 
     // reset bookingButtonState and color manually
     this.bookingButtonState = false;
-    this.bookingButtonColor = "info";
+    this.bookingButtonColor = 'info';
 
     // read only, can not edit
     this.selectableOption = false;
@@ -499,27 +513,22 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     this.clearAllSearchLabels();
   }
 
-  clearAllSearchLabels(): void{
-    this.projectIdForLabel = "";
-    this.teacherIdForLabel = "";
-    this.projectNameForLabel = "";
-    this.teacherNameForLabel = "";
+  clearAllSearchLabels(): void {
+    this.projectIdForLabel = '';
+    this.teacherIdForLabel = '';
+    this.projectNameForLabel = '';
+    this.teacherNameForLabel = '';
   }
 
 
   // when press "Yes" button in "cancelBookedCourse" modal
-  removeCourse(){
+  removeCourse() {
     let courseRemoving = this.courses.find(value => (value.id === this.courseIdRemoving));
-    this.data.removeCourseForPerson(courseRemoving,"student",this.person_id)
-      .then((ok)=>{
-        console.log('ok');
-        console.log(ok);
-
+    this.data.removeCourseForPerson(courseRemoving, 'student', this.person_id)
+      .then((ok) => {
+        console.log('the course has been removed');
       })
       .catch(error => console.log(error.body));
-
-    // update the Calendar
-    this.displayBookingCalendar();
   }
 
 

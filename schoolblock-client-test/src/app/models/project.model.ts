@@ -5,5 +5,5 @@ export class Project {
   name: string;
   desc: string;
   type: string;
-  modulesUnits:[ModuleUnit]
+  modulesUnits:[ModuleUnit];
 }

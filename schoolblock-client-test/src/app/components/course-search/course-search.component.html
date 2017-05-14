@@ -43,7 +43,7 @@
                 </select>
               </div>
               <!--Select Teacher-->
-              <div class="form-group">
+              <div class="form-group" *ngIf="activeTeacherSelectList()">
                 <label for="teacher">Teacher</label>
                 <select class="form-control" id="teacher"
                         name="teacher" [(ngModel)]="searchFilter.teacher_id">

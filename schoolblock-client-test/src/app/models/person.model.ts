@@ -11,5 +11,5 @@ export class Person {
   age: string;
   contact: { tel: string, wechat: string }
   projects: [Project];
-  courses: [Course]
+  courses: [Course];
 }

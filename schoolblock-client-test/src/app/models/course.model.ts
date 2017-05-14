@@ -14,5 +14,5 @@ export class Course {
   end: any;
   start_unix: any;
   end_unix: any;
-  booked: boolean
+  booked: boolean;
 }

@@ -52,44 +52,43 @@ export class DataService {
     return this.coursesSource.asObservable();
   }
 
-  checkTimeNotTaken(start_unix: number,end_unix: number,courses: Course[]): boolean{
+  checkTimeNotTaken(start_unix: number, end_unix: number, courses: Course[]): boolean{
     let isTaken = false;
-    for(let course of courses){
-      if(
-        (course.start_unix < start_unix && course.end_unix > start_unix)
-        ||
-        (course.start_unix < end_unix && course.end_unix > end_unix)
-        ||
-        (start_unix < course.start_unix && end_unix > course.start_unix)
-        ||
-        (start_unix < course.end_unix && end_unix > course.end_unix)
-      )
-        isTaken = true;
+    for (let course of courses){
+      if (
+         (course.start_unix < start_unix && course.end_unix > start_unix)
+         ||
+         (course.start_unix < end_unix && course.end_unix > end_unix)
+         ||
+         (start_unix < course.start_unix && end_unix > course.start_unix)
+         ||
+         (start_unix < course.end_unix && end_unix > course.end_unix)
+      ) {isTaken = true; }
     }
 
-    if(isTaken){
+    if (isTaken) {
       return false;
     }
     return true;
   };
 
   bookCourseForPerson(course: Course, role: string, person_id: string): Promise<Course>{
-    let headers = new Headers({'content-type':'application/json'});
+    let headers = new Headers({'content-type': 'application/json'});
     return this.http.post(`api/v1/booking/course/${role}/${person_id}`, course, headers)
       .toPromise()
       .then((res: Response) => {
-        this.getCoursesByPerson(person_id,role);
+        this.getCoursesByPerson(person_id, role);
         return res.json();
       })
       .catch(this.handleError);
   }
 
   removeCourseForPerson(course: Course, role: string, person_id: string): Promise<Course>{
-    let headers = new Headers({'content-type':'application/json'});
+    let headers = new Headers({'content-type': 'application/json'});
     return this.http.post(`api/v1/removing/course/${role}/${person_id}`, course, headers)
       .toPromise()
       .then((res: Response) => {
-        this.getCoursesByPerson(course.teacher_id,'teacher');
+        this.getCoursesByPerson(course.teacher_id, 'teacher');
         return res.json();
       })
       .catch(this.handleError);

@@ -38,9 +38,9 @@ export class AuthGuardService implements CanActivate {
       email: 'Mike@gmail.com',
       nickname: 'Lion',
     };
-    if(this.isTeacher()){
+    if (this.isTeacher()) {
       return teacherMock;
-    }else{
+    } else {
       return studentMock;
     }
   }

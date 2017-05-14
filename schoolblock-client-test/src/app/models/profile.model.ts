@@ -3,5 +3,5 @@ export class Profile {
   name: string;
   role: string;
   email: string;
-  nickname: string
+  nickname: string;
 }
