@@ -84,6 +84,17 @@ export class DataService {
       .catch(this.handleError);
   }
 
+  removeCourseForPerson(course: Course, role: string, person_id: string): Promise<Course>{
+    let headers = new Headers({'content-type':'application/json'});
+    return this.http.post(`api/v1/removing/course/${role}/${person_id}`, course, headers)
+      .toPromise()
+      .then((res: Response) => {
+        this.getCoursesByPerson(course.teacher_id,'teacher');
+        return res.json();
+      })
+      .catch(this.handleError);
+  }
+
 
 
   // error handler

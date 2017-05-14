@@ -43,6 +43,18 @@ router.post("/booking/course/student/:id", jsonParser, function (req, res) {
         });
 });
 
+router.post("/removing/course/student/:id", jsonParser, function (req, res) {
+    personService.removeCourse(req.body)
+        .then(function (ok) {
+            console.log('server rest.js:');
+            console.log(ok);
+            console.log("The course has been booked for you.");
+            res.json(ok);
+        }, function (error) {
+            res.status(400).send("Sorry, Failed to remove.");
+        });
+});
+
 
 
 

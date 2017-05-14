@@ -76,6 +76,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   subscriptionCourses: Subscription;
 
   newCourse: Course = Object.assign({}, DEFAULT_COURSE);
+  courseIdRemoving: string = '';
 
   startForBookingModal = "";
   endForBookingModal = "";
@@ -194,6 +195,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
       eventClick: function (calEvent, view) {
         //those courses I booked can only be canceled
         if(self.bookingButtonState && (calEvent.student_id === self.person_id)){
+          self.courseIdRemoving = calEvent.id;
           jQuery('#cancelBookedCourseModal').modal('show');
         }
 
@@ -391,6 +393,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
 
   displayBookingCalendar(){
+    console.log('Updating Calendar...');
     // after search you can select the cell
     this.selectableOption = true;
 
@@ -442,7 +445,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // when press "Submit" button in booking modal, immediately ...
+  // when press "Submit" button in booking modal
   bookCourse(){
     console.log(this.newCourse);
     this.data.bookCourseForPerson(this.newCourse,"student",this.person_id)
@@ -504,10 +507,26 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   }
 
 
+  // when press "Yes" button in "cancelBookedCourse" modal
   removeCourse(){
+    let courseRemoving = this.courses.find(value => (value.id === this.courseIdRemoving));
+    this.data.removeCourseForPerson(courseRemoving,"student",this.person_id)
+      .then((ok)=>{
+        console.log('ok');
+        console.log(ok);
+
+      })
+      .catch(error => console.log(error.body));
+
     // update the Calendar
     this.displayBookingCalendar();
   }
+
+
+
+
+
+
 
 }
 

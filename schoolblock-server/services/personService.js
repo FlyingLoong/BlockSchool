@@ -125,14 +125,14 @@ var addCourse = function (newCourse) {
                     if (person) {
                         person.courses.push(newCourse);
                         person.save();
-                        console.log("The course has been added into student's profile.");
+                        console.log("Ok! The course has been added into student's profile.");
                     } else {
                         reject(err);
                     }
                 });
                 resolve(newCourse);
             } else if (count >= 1) {
-                console.log("The time has been taken. Try others.");
+                console.log("Sorry, the time has been taken. Try others.");
             } else {
                 reject(err);
             }
@@ -141,11 +141,38 @@ var addCourse = function (newCourse) {
 };
 
 
+var removeCourse = function (removingCourse) {
+    console.log("server-side: personService : removeCourse()");
+
+    return new Promise((resolve, reject) => {
+        // remove course from corresponding student
+        Person.update({id: removingCourse.student_id},{ $pull: { "courses" : { id: removingCourse.id } } }, function(err,ok){
+            if(err){
+                console.log("Sorry, the course can not be removed. Try again.");
+                reject(err);
+            }else{
+                console.log("Ok! The course has been removed from student's profile.");
+            };
+        });
+        // remove course from corresponding teacher
+        Person.update({id: removingCourse.teacher_id},{ $pull: { "courses" : { id: removingCourse.id } } }, function(err,ok){
+            if(err){
+                console.log("Sorry, the course can not be removed. Try again.");
+                reject(err);
+            }else{
+                console.log("Ok! The course has been removed from teacher's profile.");
+                // return the teacher's profile
+                resolve(ok);
+            };
+        });
+    });
+};
 
 
 module.exports = {
     getProjectsByPerson: getProjectsByPerson,
     getTeachersByProject: getTeachersByProject,
     getCoursesByPerson: getCoursesByPerson,
-    addCourse: addCourse
+    addCourse: addCourse,
+    removeCourse: removeCourse
 };
