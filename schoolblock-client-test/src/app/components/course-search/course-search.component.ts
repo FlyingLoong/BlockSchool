@@ -464,8 +464,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     console.log(this.newCourse);
     this.data.bookCourseForPerson(this.newCourse, 'student', this.person_id)
       .then((course) => {
-        // Once succeed, should update the calendar
-        this.searchCoursesByTeacher();
+        console.log('the course has been reserved');
       })
       .catch(error => console.log(error.body));
     this.newCourse = Object.assign({}, DEFAULT_COURSE);
@@ -477,7 +476,6 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     this.subscriptionMyBookedCourses = this.data.getCoursesByPerson(this.person_id, 'student')
       .subscribe(courses => {
         this.myBookedCourses = courses;
-        this.courses = this.myBookedCourses;
 
         // invoke displayMyCoursesCalendar() method
         this.displayMyCoursesCalendar();
@@ -505,7 +503,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     // clear all events before updating
     $('#calendar').fullCalendar( 'removeEvents');
     // add new events on Calendar
-    $('#calendar').fullCalendar('addEventSource', this.courses);
+    $('#calendar').fullCalendar('addEventSource', this.myBookedCourses);
     // goto month View
     $('#calendar').fullCalendar('changeView', 'month');
 

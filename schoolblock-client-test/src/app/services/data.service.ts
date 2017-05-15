@@ -77,7 +77,7 @@ export class DataService {
     return this.http.post(`api/v1/booking/course/${role}/${person_id}`, course, headers)
       .toPromise()
       .then((res: Response) => {
-        this.getCoursesByPerson(person_id, role);
+        this.getCoursesByPerson(course.teacher_id, role);
         return res.json();
       })
       .catch(this.handleError);
