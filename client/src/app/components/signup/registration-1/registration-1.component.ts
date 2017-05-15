@@ -23,7 +23,7 @@ export class Registration1Component implements OnInit {
 
   userInfo: User = Object.assign({}, DEFAULT_USER) ;
 
-  constructor(@Inject('auth') private auth, private _router: Router) { }
+  constructor(@Inject('auth') private auth, @Inject('signUp') private signUp, private _router: Router) { }
 
   ngOnInit() {
     this.userInfo.email = this.auth.user.email;
@@ -34,6 +34,9 @@ export class Registration1Component implements OnInit {
     console.log(this.userInfo.email);
     this.auth.user.email = this.userInfo.email;
     this.auth.user.password = this.userInfo.password;
+
+    this.signUp.setProcessStatus("step2");
+
     this._router.navigate(['signUp/registration-2']);
   }
 

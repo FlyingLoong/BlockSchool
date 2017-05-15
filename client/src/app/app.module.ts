@@ -7,6 +7,7 @@ import { routes } from './app.routes';
 
 import { AuthService } from './services/auth.service';
 import { ScheduleService } from './services/schedule.service';
+import { SignupService } from './services/signup.service';
 
 import { CalendarComponent } from 'angular2-fullcalendar/src/calendar/calendar';
 
@@ -47,6 +48,10 @@ import { SignupComponent } from './components/signup/signup/signup.component';
     {
       provide: 'schedule',
       useClass: ScheduleService
+    },
+    {
+      provide: 'signUp',
+      useClass: SignupService
     }
   ],
   bootstrap: [AppComponent]

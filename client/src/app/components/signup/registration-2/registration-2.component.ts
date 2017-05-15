@@ -23,7 +23,7 @@ export class Registration2Component implements OnInit {
 
   userInfo: User = Object.assign({}, DEFAULT_USER);
 
-  constructor(@Inject("auth") private auth, private _router: Router) { }
+  constructor(@Inject('auth') private auth, @Inject('signUp') private signUp, private _router: Router) { }
 
   ngOnInit() {
   }
@@ -46,6 +46,8 @@ export class Registration2Component implements OnInit {
               .catch (
                 console.log("Add user fail!") // Debug
               )
+
+    this.signUp.setProcessStatus('step3');
   }
 
 }
