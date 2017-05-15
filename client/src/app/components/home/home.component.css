@@ -1,0 +1,18 @@
+.home-hr {
+  background-color: black;
+  height: 3px;
+}
+
+.p-header {
+  font-size: 50px;
+  color: black;
+}
+
+.p-content {
+  display: block;
+}
+
+.horizon-small-blocks {
+  width: 60px;
+  height: 20px;
+}
