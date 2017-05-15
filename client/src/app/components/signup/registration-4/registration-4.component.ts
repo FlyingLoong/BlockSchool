@@ -161,6 +161,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       eventRender: this.eventRender.bind(this),
       dayRender: this.dayRender.bind(this),
       eventClick: this.eventClick.bind(this),
+      eventAfterRender: this.eventAfterRender.bind(this),
       viewRender: this.changeTheme.bind(this)
     });
   }
@@ -522,6 +523,19 @@ export class Registration4Component implements OnInit, AfterViewInit  {
         console.log('the course has been removed');
       })
       .catch(error => console.log(error.body));
+  }
+
+  eventAfterRender(event, element, view) {
+    jQuery(element).tooltip({
+      template:`<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-head"><h6><span class="glyphicon glyphicon-user"></span> ${event.teacher_name}</h6></div><div class="tooltip-inner"></div></div>`,
+      title: event.title + " " + event.type.toUpperCase(),
+      delay: { "show": 1000, "hide": 200 },
+      placement:'auto', container: 'body'
+    });
+    $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function(){
+      $('.tooltip.bottom .tooltip-arrow').css('border-bottom-color', 'red');
+      $('.tooltip-inner').css('background-color', 'red');
+    });
   }
 
 }
