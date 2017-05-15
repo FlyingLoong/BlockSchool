@@ -3,16 +3,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 const DEFAULT_USER = Object.freeze({
-  email: "",
-  password: "",
-  parentName: "",
-  relationship: "",
-  childName: "",
+  email: '',
+  password: '',
+  parentName: '',
+  relationship: '',
+  childName: '',
   childAge: 5,
-  childGender: "",
-  childBirthday: "",
-  childInterest: ""
-})
+  childGender: '',
+  childBirthday: '',
+  childInterest: ''
+});
 
 @Component({
   selector: 'app-registration-2',
@@ -23,13 +23,13 @@ export class Registration2Component implements OnInit {
 
   userInfo: User = Object.assign({}, DEFAULT_USER);
 
-  constructor(@Inject("auth") private auth, private _router: Router) { }
+  constructor(@Inject('auth') private auth, private _router: Router) { }
 
   ngOnInit() {
   }
 
   nextStep(): void {
-    console.log("user.email is "+this.auth.user.email);
+    console.log('user.email is ' + this.auth.user.email);
     this.auth.user.parentName = this.userInfo.parentName;
     this.auth.user.relationship = this.userInfo.relationship;
     this.auth.user.childName = this.userInfo.childName;
@@ -44,8 +44,8 @@ export class Registration2Component implements OnInit {
                 this._router.navigate(['signUp/registration-3']);
               })
               .catch (
-                console.log("Add user fail!") // Debug
-              )
+                console.log('Add user fail!') // Debug
+              );
   }
 
 }

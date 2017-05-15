@@ -13,6 +13,7 @@ import { Modal } from 'bootstrap/js/modal.js';
 
 // Still can recognize jQuery even after bundle
 declare var jQuery: any;
+
 const DEFAULT_COURSE: Course = Object.freeze({
   id: '',
   title: '',

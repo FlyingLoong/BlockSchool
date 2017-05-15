@@ -8,7 +8,7 @@ export class AuthGuardService implements CanActivate {
   constructor(private router: Router) {
   }
 
-  public authenticated(){
+  public authenticated() {
     // just a mock
     return true;
   }
@@ -24,14 +24,14 @@ export class AuthGuardService implements CanActivate {
 
   public getProfile(): Profile {
     // just a mock
-    let studentMock: Profile = {
+    const studentMock: Profile = {
       id: '1e0ate67',
       name: 'Bob',
       role: 'student',
       email: 'Bob@gmail.com',
       nickname: 'cat',
     };
-    let teacherMock: Profile = {
+    const teacherMock: Profile = {
       id: '2r589u7',
       name: 'Mike',
       role: 'teacher',

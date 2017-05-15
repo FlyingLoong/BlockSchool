@@ -1,12 +1,12 @@
-let mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
-let teacherSchema = mongoose.Schema({
+var teacherSchema = mongoose.Schema({
     teacherEmail: String,
     teacherName: String,
     teacherGender: String,
     teacherBirthday: Date
 });
 
-let teacherModel = mongoose.model("teacherModel", teacherSchema);
+var teacherModel = mongoose.model("teacherModel", teacherSchema);
 
 module.exports = teacherModel;

@@ -11,11 +11,11 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { DataService } from './services/data.service';
-
 import { AuthGuardService } from './services/auth-guard.service';
+
 import { ProfileComponent } from './components/profile/profile.component';
 import { FavoriteComponent } from './components/favorite/favorite.component';
-import { CourseSearchComponent } from './components/course-search/course-search.component'
+import { CourseSearchComponent } from './components/course-search/course-search.component';
 
 @NgModule({
   declarations: [

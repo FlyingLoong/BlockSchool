@@ -1,5 +1,5 @@
-let mongoose = require('mongoose');
-let userSchema = mongoose.Schema(
+var mongoose = require('mongoose');
+var userSchema = mongoose.Schema(
     {
         email: String,
         password: String,
@@ -13,6 +13,6 @@ let userSchema = mongoose.Schema(
     }
 );
 
-let userModel = mongoose.model("userModel", userSchema);
+var userModel = mongoose.model("userModel", userSchema);
 
 module.exports = userModel;
