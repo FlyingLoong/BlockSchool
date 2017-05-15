@@ -30,10 +30,8 @@ const DEFAULT_COURSE: Course = Object.freeze({
   start_unix: null,
   end_unix: null,
   booked: false
-})
+});
 
-// store " this " -> " self "
-const self = this;
 
 @Component({
   selector: 'app-course-search',
@@ -45,10 +43,6 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   person_name = '';
   person_id = '';
   person_role = '';
-
-  search_id = '';
-  search_role = '';
-  updateURL = '';
 
   searchFilter: Filter = {
     teacher_id: '',
@@ -93,7 +87,6 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   dateToCellElementList = new Map();
   calEventArray = [];
   eventElementArray = [];
-  selectedEventList = new Map();
   dayRenderMode = '';
 
   bookingButtonState = false;
@@ -132,18 +125,15 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // load an empty calendar
     this.courseCalendar();
+    // load all of my booked courses
+    this.searchMyBookedCourses();
     this.changeTheme();
 
     // Observe my booked courses
     // this.searchMyBookedCourses();
   }
   courseCalendar(): void {
-    // store " this " -> " self "
-    const self = this;
     $('#calendar').fullCalendar({
-      customButtons: {
-        // To Do
-      },
       header: {
         left: 'bookingButton,today',
         center: 'prev title next',
@@ -153,9 +143,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
         // footer costom buttons
       },
       themeButtonIcons: false,
+      height: 500,
       // width vs height
       aspectRatio: 1.2,
       editable: this.editableOption,
+      slotDuration: '00:30:00',
 
       events: this.courses,
       eventLimit: this.eventLimitOption, // allow "more" link when too many events
@@ -168,63 +160,27 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
       timezone: 'local',
 
       selectable: this.selectableOption,
-      select: function(start, end, allDay) {
-        // console.log("bookingButton: "+self.bookingButtonState);
-        // only when current view is agendaWeek and bookingButton is on
-        if ($('#calendar').fullCalendar('getView').name === 'agendaWeek' && self.bookingButtonState) {
-          // when click on a calendar cell in agendaWeek, immediately record the time and invoke bookCourse() method
-          // timezone: 'local', so the date on calendar is the local time.
-          // both "start" and "end" still store UTC though always put the corresponding local time on the calendar
-          // p.s. the UTC time will be stored in Mlab
-          // invoke this.openBookingModal() method
-          self.openBookingModal(start, end);
-        }
-      },
-      // eventRender( for each event )
-      eventRender: function(calEvent, element, view) {
-        self.calEventArray.push(calEvent);
-        self.eventElementArray.push(element);
-        // invoke eventRender() method
-        self.eventRender(calEvent, element, view);
-      },
-      dayRender: function( date, cell ){
-        self.currentView = $('#calendar').fullCalendar('getView');
-        self.dateToCellElementList.set(date.format('YYYY-MM-DD'), cell);
-        self.dayRender(date, cell);
-      },
-      eventClick: function (calEvent, view) {
-        // those courses I booked can only be canceled
-        if (self.bookingButtonState && (calEvent.student_id === self.person_id)) {
-          self.courseIdRemoving = calEvent.id;
-          jQuery('#cancelBookedCourseModal').modal('show');
-        }
-
-
-        $('#calendar span.fc-title').css({
-          'color': '#5bc0de',
-        });
-        // event time
-        $('#calendar span.fc-time').css({
-          'color': '#5bc0de',
-        });
-
-      },
-      dayClick: function(dayDate) {
-        const el = this; // get the element
-        // To Do
-      },
-
-      viewRender: function(view, element){
-        // In keeping with the style, invoke changeTheme() method.
-        self.changeTheme();
-      }
+      select: this.select.bind(this),
+      eventRender: this.eventRender.bind(this),
+      dayRender: this.dayRender.bind(this),
+      eventClick: this.eventClick.bind(this),
+      viewRender: this.changeTheme.bind(this)
     });
   }
 
 
-  // invoke methods
-  bookingButtonClick(el: any): string {
-
+  select(start, end, allDay): void {
+    // only when current view is agendaWeek and bookingButton is on
+    if ($('#calendar').fullCalendar('getView').name === 'agendaWeek' && this.bookingButtonState) {
+      // when click on a calendar cell in agendaWeek, immediately record the time and invoke bookCourse() method
+      // timezone: 'local', so the date on calendar is the local time.
+      // both "start" and "end" still store UTC though always put the corresponding local time on the calendar
+      // p.s. the UTC time will be stored in Mlab
+      // invoke this.openBookingModal() method
+      this.openBookingModal(start, end);
+    }
+  }
+  bookingButtonClick(): string {
     // turn on the booking-button , the button apply this style and assign state true
     if (!this.bookingButtonState) {
       this.bookingButtonState = true;
@@ -240,7 +196,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
   }
 
-  eventRender(calEvent: any, element: any, view: any) {
+  // Render each event
+  eventRender(calEvent: any, element: any, view: any): void {
+    this.calEventArray.push(calEvent);
+    this.eventElementArray.push(element);
     if (calEvent.student_id !== this.person_id) {
       this.changeCSS(element, 'course-normal');
     } else {
@@ -253,7 +212,9 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     this.changeTheme();
 
   }
-  dayRender(date: any, cell: any) {
+  dayRender(date: any, cell: any): void {
+    this.currentView = $('#calendar').fullCalendar('getView');
+    this.dateToCellElementList.set(date.format('YYYY-MM-DD'), cell);
     // when booking button is on, switch to the booking theme
     if (!this.bookingButtonState) {
       $(cell).css('background-color', '#ffffff');
@@ -268,18 +229,27 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     if ($('cell:has(img)').length !== 0) {
       $(cell).children('img').remove();
     }
-    // if the day has any booked courses, tick it.
-    this.selectedEventList.forEach((value, key, map) => {
-      if (date.format('YYYY-MM-DD') === value.format('YYYY-MM-DD')) {
-        // Add the tick sign for those days with booked courses
-        $(cell).html('<img src="../../../assets/icon-tick-small.png" width="20" height="20">');
-      };
-    });
-
   }
 
+  eventClick(calEvent, view): void {
+  // Only those courses I booked can be canceled
+  if (this.bookingButtonState && (calEvent.student_id === this.person_id)) {
+    this.courseIdRemoving = calEvent.id;
+    jQuery('#cancelBookedCourseModal').modal('show');
+  }
+
+
+  $('#calendar span.fc-title').css({
+    'color': '#5bc0de',
+  });
+  // event time
+  $('#calendar span.fc-time').css({
+    'color': '#5bc0de',
+  });
+
+}
+
   updateEvent(): void {
-    // console.log('Add');
     const eventClient = $('#calendar').fullCalendar('clientEvents');
     eventClient[3].title = 'xxx';
     for (let i = 0 ; i < eventClient.length ; i++) {
@@ -291,6 +261,7 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     $(element).css('border-color', this.cssMap[key]['border-color']);
   }
 
+  // In keeping with the style of homepage
   changeTheme(): void {
     // Month Year
     $('#calendar h2').css('color', '#777777');
@@ -336,14 +307,14 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     this.projectsForSearch = [];
     this.subscriptionProjects = this.data.getProjectsByPerson(this.person_id, 'student')
       .subscribe(projects => {
-        this.projectsForSearch = projects
+        this.projectsForSearch = projects;
       });
   }
 
   // when select project in modal , immediately update the corresponding teachers list
   searchTeachersByProject() {
     this.teachersForSearch = [];
-    let project_id = this.searchFilter.project_id;
+    const project_id = this.searchFilter.project_id;
     this.subscriptionTeachers = this.data.getTeachersByProject(project_id)
       .subscribe(teachers => {
         this.teachersForSearch = teachers;
@@ -364,11 +335,11 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
     this.teachers = this.teachersForSearch;
 
     // search courses by teacher
-    let teacher_id = this.searchFilter.teacher_id;
+    const teacher_id = this.searchFilter.teacher_id;
     this.subscriptionCourses = this.data.getCoursesByPerson(teacher_id, 'teacher')
       .subscribe(courses => {
         // hide course information of others and replace by "Taken"
-        for ( let course of courses){
+        for ( const course of courses){
           if (course.student_id !== this.person_id) {
             course.title = 'Taken';
           }
@@ -426,10 +397,10 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
   }
 
-  openBookingModal(start, end){
+  openBookingModal(start, end) {
     // get timestamp and change the type to Number
-    let start_unix = +start.valueOf();
-    let end_unix = +end.valueOf();
+    const start_unix = +start.valueOf();
+    const end_unix = +end.valueOf();
     if (this.data.checkTimeNotTaken(start_unix, end_unix, this.courses)) {
       // Only when the time is not taken, you can book your course
       this.newCourse.grade = '';
@@ -461,7 +432,6 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
   // when press "Submit" button in booking modal
   bookCourse() {
-    console.log(this.newCourse);
     this.data.bookCourseForPerson(this.newCourse, 'student', this.person_id)
       .then((course) => {
         console.log('the course has been reserved');
@@ -521,19 +491,12 @@ export class CourseSearchComponent implements OnInit, AfterViewInit {
 
   // when press "Yes" button in "cancelBookedCourse" modal
   removeCourse() {
-    let courseRemoving = this.courses.find(value => (value.id === this.courseIdRemoving));
+    const courseRemoving = this.courses.find(value => (value.id === this.courseIdRemoving));
     this.data.removeCourseForPerson(courseRemoving, 'student', this.person_id)
       .then((ok) => {
         console.log('the course has been removed');
       })
       .catch(error => console.log(error.body));
   }
-
-
-
-
-
-
-
 }
 
