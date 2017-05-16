@@ -4,29 +4,35 @@
   <p>Planning Meeting with {{teacher.name}}</p>
   -->
   <hr>
+  <!--
   <p>All times are in <select id="timezone-selector"></select></p>
+  -->
   <!-- fullcalendar and corresponding modals -->
   <div class="container-fluid">
     <div class="btn-group">
       <!--"Search Course" Button triggers corresponding modal -->
       <!-- "Search Course Path: Project -> Teacher -> Course"-->
-      <span>
-      <button type="button" class="btn btn-info" (click)="searchMyBookedCourses()">
-        <span class ="glyphicon glyphicon-ok-circle" arial-hidden="true"></span> My Course
-      </button>
-    </span>
-      <span>
-      <button type="button" class="{{'btn btn-'+bookingButtonColor}}" *ngIf="ActiveBookingButton()" (click)="bookingButtonClick()">
-        <span class ="glyphicon glyphicon-tag" arial-hidden="true"></span> Reservation
-      </button>
-    </span>
-      <span>
-      <button type="button" class="btn btn-info" (click)="initSearchModal()" data-toggle="modal" data-target="#exampleModalSearchCourse">
-        <span class ="glyphicon glyphicon-search" arial-hidden="true"></span> Search
-      </button>
-    </span>
-      <span class="label label-info">{{projectNameForLabel}}</span>
-      <span class="label label-info">{{teacherNameForLabel}}</span>
+      <div>
+        <span>
+          <button type="button" class="btn btn-info" (click)="searchMyBookedCourses()">
+            <span class ="glyphicon glyphicon-ok-circle" arial-hidden="true"></span> My Course
+          </button>
+        </span>
+        <span>
+          <button type="button" class="{{'btn btn-'+bookingButtonColor}}" *ngIf="activeBookingButton()" (click)="bookingButtonClick()">
+            <span class ="glyphicon glyphicon-tag" arial-hidden="true"></span> Reservation
+          </button>
+        </span>
+        <span>
+          <button type="button" class="btn btn-info" (click)="initSearchModal()" data-toggle="modal" data-target="#exampleModalSearchCourse">
+            <span class ="glyphicon glyphicon-search" arial-hidden="true"></span> Search
+          </button>
+        </span>
+        <span class="label label-success"><span class ="glyphicon glyphicon-ok" arial-hidden="true"></span> reserved</span>
+        <span class="label label-info"><span class ="glyphicon glyphicon-tag" arial-hidden="true"></span> {{projectTypeForLabel}}</span>
+        <span class="label label-info"><span class ="glyphicon glyphicon-blackboard" arial-hidden="true"></span> {{projectNameForLabel}}</span>
+        <span class="label label-info"><span class ="glyphicon glyphicon-user" arial-hidden="true"></span> {{teacherNameForLabel}}</span>
+      </div>
 
       <!-- Search Modal -->
       <div class="modal fade" id="exampleModalSearchCourse" tabindex="-1" role="dialog" aria-labelledby="exampleModalSearchCourseTitle" aria-hidden="true">
@@ -42,7 +48,7 @@
               <form #formRef="ngForm">
                 <!--Select Project-->
                 <div class="form-group">
-                  <label for="project">Project</label>
+                  <label for="project"><span class ="glyphicon glyphicon-blackboard" arial-hidden="true"></span> Project</label>
                   <select class="form-control" id="project"
                           name="project" [(ngModel)]="searchFilter.project_id" (change)="searchTeachersByProject()">
                     <option *ngFor="let projectForSearch of projectsForSearch" [value]="projectForSearch.id">
@@ -50,9 +56,14 @@
                     </option>
                   </select>
                 </div>
+                <!--Active Display project Decription-->
+                <div class="form-group" *ngIf="activeProjectInfo()">
+                  <h5><span class ="glyphicon glyphicon-info-sign" arial-hidden="true"></span> {{projectDescForSearch}}</h5>
+                </div>
                 <!--Select Teacher-->
                 <div class="form-group" *ngIf="activeTeacherSelectList()">
-                  <label for="teacher">Teacher</label>
+                  <hr>
+                  <label for="teacher"><span class ="glyphicon glyphicon-user" arial-hidden="true"></span> Teacher</label>
                   <select class="form-control" id="teacher"
                           name="teacher" [(ngModel)]="searchFilter.teacher_id">
                     <option *ngFor="let teacherForSearch of teachersForSearch" [value]="teacherForSearch.id">
@@ -102,19 +113,24 @@
             </h4>
           </div>
           <div class="modal-body">
-            <p><span class ="glyphicon glyphicon-blackboard" arial-hidden="true"></span> Project: {{newCourse.project_name}}</p>
-            <p><span class ="glyphicon glyphicon-user" arial-hidden="true"></span> Teacher: {{newCourse.teacher_name}}</p>
-            <p><span class ="glyphicon glyphicon-time" arial-hidden="true"></span> Time: {{startForBookingModal}} <span class ="glyphicon glyphicon-arrow-right" arial-hidden="true"></span> {{endForBookingModal}}</p>
+            <p><span class ="glyphicon glyphicon-blackboard" arial-hidden="true"></span> {{newCourse.project_name}}</p>
+            <p><span class ="glyphicon glyphicon-info-sign" arial-hidden="true"></span> {{projectDescForLabel}}</p>
+            <hr>
+            <p><span class ="glyphicon glyphicon-user" arial-hidden="true"></span> {{newCourse.teacher_name}}</p>
+            <p><span class ="glyphicon glyphicon-time" arial-hidden="true"></span> {{startForBookingModal}} <span class ="glyphicon glyphicon-arrow-right" arial-hidden="true"></span> {{endForBookingModal}}</p>
             <hr>
             <!--Select moduleUnit-->
             <div class="form-group">
               <label for="moduleUnit">Select Your Module</label>
-              <select class="form-control" id="moduleUnit"
-                      name="moduleUnit" [(ngModel)]="newCourse.title">
-                <option *ngFor="let moduleUnit of modulesUnits" [value]="moduleUnit.title">
+              <select class="form-control" id="moduleUnit" name="moduleUnit" [(ngModel)]="moduleUnitIdForLabel" (change)="updateModuleUnitTitleAndDesc()">
+                <option *ngFor="let moduleUnit of modulesUnits" [value]="moduleUnit.id">
                   {{moduleUnit.title}}
                 </option>
               </select>
+            </div>
+            <!--Active Display moduleUnit Description-->
+            <div class="form-group" *ngIf="activeModuleUnitInfo()">
+              <span class ="glyphicon glyphicon-info-sign" arial-hidden="true"></span> {{newCourse.desc}}
             </div>
           </div>
           <!--Cancel or Submit-->
@@ -172,7 +188,7 @@
           <div class="modal-header bg-danger">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">
-              <span class ="glyphicon glyphicon-exclamation-sign" arial-hidden="true"></span> Cancel Course
+              <span class ="glyphicon glyphicon-exclamation-sign" arial-hidden="true"></span> Cancel Your Reservation
             </h4>
           </div>
           <div class="modal-body">

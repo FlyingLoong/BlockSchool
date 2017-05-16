@@ -26,6 +26,7 @@ var moduleUnitSchema = new Schema({
 var projectSchema = new Schema({
     id: String,
     name: String,
+    grade: String,
     desc: String,
     type: String,
     modulesUnits: [moduleUnitSchema]

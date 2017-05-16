@@ -50,16 +50,22 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     module_unit_id: ''
   };
 
+  projectTypeForLabel = '';
   projectIdForLabel = '';
+  projectDescForLabel = '';
   teacherIdForLabel = '';
+  moduleUnitIdForLabel = '';
   projectNameForLabel = '';
   teacherNameForLabel = '';
+  moduleUnitTitleForLabel = '';
 
   projectsForSearch: Project[] = [];
+  projectDescForSearch = '';
   projects: Project[] = [];
   subscriptionProjects: Subscription;
 
   modulesUnitsForSearch: ModuleUnit[] = [];
+  moduleUnitDescForSearch = '';
   modulesUnits: ModuleUnit[] = [];
 
   teachersForSearch: Person[] = [];
@@ -95,20 +101,16 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   cssMap = {
     'course-booking': {
       'background-color': '#d2fd35',
-      'border-color': '#5bc0de'
+      'border-color': '#5bc0de',
     },
     'course-normal': {
       'background-color': '#ffffff',
-      'border-color': '#5bc0de'
+      'border-color': '#5bc0de',
     },
-    'course-editing': {
+    'course-conflict': {
       'background-color': '#FECE55',
       'border-color': '#c9c9c9'
     },
-    'course-removing': {
-      'background-color': '#ffffff',
-      'border-color': '#c42933'
-    }
   };
 
   constructor( @Inject('data') private data, private router: Router ) { }
@@ -203,8 +205,6 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       // change those events whose student_id match with mine
       this.changeCSS(element, 'course-booking');
     };
-
-
     this.paintEvents();
     this.changeTheme();
 
@@ -249,16 +249,6 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       this.courseIdRemoving = calEvent.id;
       jQuery('#cancelBookedCourseModal').modal('show');
     }
-
-
-    $('#calendar span.fc-title').css({
-      'color': '#5bc0de',
-    });
-    // event time
-    $('#calendar span.fc-time').css({
-      'color': '#5bc0de',
-    });
-
   }
 
   updateEvent(): void {
@@ -305,7 +295,10 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   initSearchModal(): void {
     // 1
     this.projectsForSearch = [];
+    this.projectDescForSearch = '';
     this.teachersForSearch = [];
+    this.modulesUnitsForSearch = [];
+    this.moduleUnitDescForSearch = '';
     // 2
     this.searchFilter.project_id = '';
     this.searchFilter.teacher_id = '';
@@ -317,6 +310,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   // Get all of your projects and update the projects list in search modal
   searchMyProjects(): void {
     this.projectsForSearch = [];
+    this.projectDescForSearch = '';
     this.subscriptionProjects = this.data.getProjectsByPerson(this.person_id, 'student')
       .subscribe(projects => {
         this.projectsForSearch = projects;
@@ -325,6 +319,9 @@ export class Registration4Component implements OnInit, AfterViewInit  {
 
   // when select project in modal , immediately update the corresponding teachers list
   searchTeachersByProject() {
+    // update the project description
+    this.projectDescForSearch = this.projectsForSearch.find(value => value.id === this.searchFilter.project_id).desc;
+    // update the corresponding teachers list
     this.teachersForSearch = [];
     const project_id = this.searchFilter.project_id;
     this.subscriptionTeachers = this.data.getTeachersByProject(project_id)
@@ -332,6 +329,14 @@ export class Registration4Component implements OnInit, AfterViewInit  {
         this.teachersForSearch = teachers;
       });
   }
+  // only when project selected, active project information tag
+  activeProjectInfo(): boolean {
+    if (this.projectDescForSearch !== '') {
+      return true;
+    }
+    return false;
+  }
+
   // only when update teachers, active teacher select list
   activeTeacherSelectList(): boolean {
     if (this.teachersForSearch.length !== 0) {
@@ -381,12 +386,15 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   changeSearchLabel(): void {
     this.projectIdForLabel = this.searchFilter.project_id;
     this.teacherIdForLabel = this.searchFilter.teacher_id;
-    this.projectNameForLabel = this.projectsForSearch.find(value => value.id === this.searchFilter.project_id).name;
-    this.teacherNameForLabel = this.teachersForSearch.find(value => value.id === this.searchFilter.teacher_id).name;
+
+    this.projectNameForLabel = this.projectsForSearch.find(value => value.id === this.projectIdForLabel).name;
+    this.projectTypeForLabel = this.projectsForSearch.find(value => value.id === this.projectIdForLabel).type;
+    this.projectDescForLabel = this.projectDescForSearch;
+    this.teacherNameForLabel = this.teachersForSearch.find(value => value.id === this.teacherIdForLabel).name;
   }
 
   // when both project and teacher search labels exist, active the booking button
-  ActiveBookingButton(): boolean {
+  activeBookingButton(): boolean {
     if (this.projectIdForLabel && this.teacherIdForLabel) {
       return true;
     }
@@ -420,9 +428,10 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     const end_unix = +end.valueOf();
     if (this.data.checkTimeNotTaken(start_unix, end_unix, this.courses)) {
       // Only when the time is not taken, you can book your course
-      this.newCourse.grade = '';
+      this.newCourse.title = '';
       this.newCourse.desc = '';
-      this.newCourse.type = 'private';
+      this.newCourse.grade = this.projectsForSearch.find(value => value.id === this.projectIdForLabel).grade;
+      this.newCourse.type = this.projectTypeForLabel;
       this.newCourse.project_id = this.projectIdForLabel;
       this.newCourse.project_name = this.projectNameForLabel;
       this.newCourse.teacher_id = this.teacherIdForLabel;
@@ -435,6 +444,8 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       this.newCourse.end_unix = end_unix;
       this.newCourse.booked = true;
 
+      // clear module Desc
+      this.moduleUnitDescForSearch = '';
       // open booking modal
       this.startForBookingModal = start.format('MMMM Do YYYY, h:mm:ss a');
       this.endForBookingModal = end.format('MMMM Do YYYY, h:mm:ss a');
@@ -442,14 +453,25 @@ export class Registration4Component implements OnInit, AfterViewInit  {
 
     } else {
       jQuery('#invalidTimeModal').modal('show');
-
-
     }
+  }
+
+  // only when project selected, active project information tag
+  activeModuleUnitInfo(): boolean {
+    if (this.newCourse.desc !== '' && this.newCourse.title !== '') {
+      return true;
+    }
+    return false;
+  }
+
+  // When the select moduleUnit, immediately update the course desc
+  updateModuleUnitTitleAndDesc(){
+    this.newCourse.title = this.modulesUnits.find(value => value.id === this.moduleUnitIdForLabel).title;
+    this.newCourse.desc = this.modulesUnits.find(value => value.id === this.moduleUnitIdForLabel).desc;
   }
 
   // when press "Submit" button in booking modal
   bookCourse() {
-
     // firstly check whether the booking input is valid
     if (this.newCourse.title === '') {
       jQuery('#invalidBookingInputModal').modal('show');
@@ -507,9 +529,11 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     this.clearAllSearchLabels();
   }
 
+  // clear all labels for html
   clearAllSearchLabels(): void {
     this.projectIdForLabel = '';
     this.teacherIdForLabel = '';
+    this.projectTypeForLabel = '';
     this.projectNameForLabel = '';
     this.teacherNameForLabel = '';
   }
@@ -525,17 +549,27 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       .catch(error => console.log(error.body));
   }
 
+  // Add popover
   eventAfterRender(event, element, view) {
-    jQuery(element).tooltip({
-      template:`<div class="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-head"><h6><span class="glyphicon glyphicon-user"></span> ${event.teacher_name}</h6></div><div class="tooltip-inner"></div></div>`,
-      title: event.title + " " + event.type.toUpperCase(),
-      delay: { "show": 1000, "hide": 200 },
-      placement:'auto', container: 'body'
-    });
-    $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function(){
-      $('.tooltip.bottom .tooltip-arrow').css('border-bottom-color', 'red');
-      $('.tooltip-inner').css('background-color', 'red');
+    jQuery(element).popover({
+      title: `<span class="glyphicon glyphicon-info-sign"></span> ${event.title}`,
+      content: `
+                <p><span class="glyphicon glyphicon-tag"></span> ${event.type.toUpperCase()}</p>
+                <p><span class="glyphicon glyphicon-blackboard"></span> ${event.project_name}</p>
+                <p><span class="glyphicon glyphicon-chevron-right"></span> ${event.title}</p>
+                <p><span class="glyphicon glyphicon-chevron-right"></span> ${event.desc}</p>
+                <p><span class="glyphicon glyphicon-user"></span> ${event.teacher_name}</p>
+                <p><span class ="glyphicon glyphicon-time"></span> ${event.start.format('MMMM Do YYYY, h:mm:ss a')}</p>
+                <p><span class ="glyphicon glyphicon-arrow-right"></span> ${event.end.format('MMMM Do YYYY, h:mm:ss a')}</p>
+               `,
+      delay: { "show": 1000, "hide": 100 },
+      placement:'auto', container: 'body',
+      trigger: 'hover',
+      html: true
     });
   }
+
+
+
 
 }
