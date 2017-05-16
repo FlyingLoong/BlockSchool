@@ -12,9 +12,10 @@ export class Registration3Component implements OnInit {
   calendarOptions: any ={}
   calendarEvents: any[] = [];
 
-  constructor(@Inject('schedule') private schedule, private _router: Router) { }
+  constructor(@Inject('schedule') private schedule, @Inject('signUp') private signUp, private _router: Router) { }
 
   ngOnInit() {
+    this.signUp.setProcessStatus('step3');
   }
 
   ngAfterViewInit() {
@@ -27,7 +28,7 @@ export class Registration3Component implements OnInit {
       defaultView: "agendaWeek",
       events: [],
       allDaySlot: false,
-      slotDuration: '01:00:00',
+      slotDuration: '00:40:00',
       dayClick: this.clickDay.bind(this),
       eventClick: this.clickEvent.bind(this)
     }

@@ -26,6 +26,7 @@ export class Registration2Component implements OnInit {
   constructor(@Inject('auth') private auth, @Inject('signUp') private signUp, private _router: Router) { }
 
   ngOnInit() {
+    this.signUp.setProcessStatus('step2');
   }
 
   nextStep(): void {

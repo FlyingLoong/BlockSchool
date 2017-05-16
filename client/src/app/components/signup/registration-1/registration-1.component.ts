@@ -28,6 +28,8 @@ export class Registration1Component implements OnInit {
   ngOnInit() {
     this.userInfo.email = this.auth.user.email;
     this.userInfo.password = this.auth.user.password;
+
+    this.signUp.setProcessStatus("step1");
   }
 
   nextStep() : void{

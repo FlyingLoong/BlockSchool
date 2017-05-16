@@ -1,34 +1,39 @@
-<form #formRef="ngForm">
-  <div class="form-group">
-    <label for="parentName">Parent Name</label>
-    <input type="text" class="form-control" id="parentName" name="parentName" required placeholder="Enter parent name here!" [(ngModel)]="userInfo.parentName">
+<div class="signUp-container">
+  <div class="row">
+    <div class="col-md-12 col-md-offset-1 col-lg-12 col-lg-offset-1">
+      <form #formRef="ngForm">
+        <div class="form-group">
+          <label for="parentName">Parent Name</label>
+          <input type="text" class="form-control" id="parentName" name="parentName" required placeholder="Enter parent name here!" [(ngModel)]="userInfo.parentName">
+        </div>
+        <div class="form-group">
+          <label for="relationship">Relationship</label>
+          <input type="text" class="form-control" id="relationship" name="relationship" required placeholder="Enter parent relationship here!" [(ngModel)]="userInfo.relationship">
+        </div><div class="form-group">
+          <label for="childName">Child Name</label>
+          <input type="text" class="form-control" id="childName" name="childName" required placeholder="Enter the child name here!" [(ngModel)]="userInfo.childName">
+        </div>
+        <div class="form-group">
+          <label for="childAge">Child Age</label>
+          <input type="text" class="form-control" id="childAge" name="childAge" required placeholder="Enter the child age here!" [(ngModel)]="userInfo.childAge">
+        </div>
+        <div class="form-group">
+          <label for="childGender">Child Gender</label>
+          <select id="childGender" name="childGender" [(ngModel)]="userInfo.childGender">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="childBirthday">Child Birthday</label>
+          <input type="date" class="form-control" id="childBirthday" name="childBirthday" required [(ngModel)]="userInfo.childBirthday">
+        </div>
+        <div class="form-group">
+          <label for="childIntest">Child Interest</label>
+          <textarea class="form-control" id="childInterest" name="childInterest" required [(ngModel)]="userInfo.childInterest"></textarea>
+        </div>
+        <span class="submit-button"><button type="submit" class="btn btn-info" (click)="nextStep()">Next Step</button></span>
+      </form>
+      </div>
+    </div>
   </div>
-  <div class="form-group">
-    <label for="relationship">Relationship</label>
-    <input type="text" class="form-control" id="relationship" name="relationship" required placeholder="Enter parent relationship here!" [(ngModel)]="userInfo.relationship">
-  </div><div class="form-group">
-    <label for="childName">Child Name</label>
-    <input type="text" class="form-control" id="childName" name="childName" required placeholder="Enter the child name here!" [(ngModel)]="userInfo.childName">
-  </div>
-  <div class="form-group">
-    <label for="childAge">Child Age</label>
-    <input type="text" class="form-control" id="childAge" name="childAge" required placeholder="Enter the child age here!" [(ngModel)]="userInfo.childAge">
-  </div>
-  <div class="form-group">
-    <label for="childGender">Child Gender</label>
-    <select id="childGender" name="childGender" [(ngModel)]="userInfo.childGender">
-      <option value="M">Male</option>
-      <option value="F">Female</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="childBirthday">Child Birthday</label>
-    <input type="datetime" class="form-control" id="childBirthday" name="childBirthday" required [(ngModel)]="userInfo.childBirthday">
-  </div>
-  <div class="form-group">
-    <label for="childIntest">Child Interest</label>
-    <textarea class="form-control" id="childInterest" name="childInterest" required [(ngModel)]="userInfo.childInterest"></textarea>
-  </div>
-  <button type="submit" class="btn btn-info" (click)="nextStep()">Next Step</button>
-</form>
-
