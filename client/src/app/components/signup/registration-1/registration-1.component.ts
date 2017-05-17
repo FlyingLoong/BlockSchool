@@ -3,15 +3,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 const DEFAULT_USER: User = Object.freeze({
-  email: "",
-  password: "",
-  parentName: "",
-  relationship: "",
-  childName: "",
+  id: '',
+  email: '',
+  password: '',
+  parentName: '',
+  relationship: '',
+  childName: '',
   childAge: 5,
-  childGender: "",
-  childBirthday: "",
-  childInterest: ""
+  childGender: '',
+  childBirthday: '',
+  childInterest: ''
 });
 
 @Component({

@@ -2,8 +2,8 @@ import { User } from './../../../models/user.model';
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-const DEFAULT_USER = Object.freeze({
-  id:'',
+const DEFAULT_USER: User = Object.freeze({
+  id: '',
   email: '',
   password: '',
   parentName: '',
