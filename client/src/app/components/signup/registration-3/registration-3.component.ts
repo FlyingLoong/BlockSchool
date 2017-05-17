@@ -9,7 +9,7 @@ import * as $ from 'jquery';
 })
 export class Registration3Component implements OnInit {
 
-  calendarOptions: any ={}
+  calendarOptions: any = {};
   calendarEvents: any[] = [];
 
   constructor(@Inject('schedule') private schedule, @Inject('signUp') private signUp, private _router: Router) { }
