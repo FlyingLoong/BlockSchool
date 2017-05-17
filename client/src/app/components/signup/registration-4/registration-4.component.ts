@@ -113,9 +113,12 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     },
   };
 
-  constructor( @Inject('data') private data, private router: Router ) { }
+  constructor( @Inject('data') private data, @Inject('signUp') private signUp, private router: Router ) { }
 
   ngOnInit() {
+
+    this.signUp.setProcessStatus('step3');
+
     // get my profile by authGuard.getProfile()
     // this.person_name = this.authGuard.getProfile().name;
     // this.person_id = this.authGuard.getProfile().id;

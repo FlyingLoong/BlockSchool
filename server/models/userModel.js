@@ -1,8 +1,10 @@
-let mongoose = require('mongoose');
-let userSchema = mongoose.Schema(
+var mongoose = require('mongoose');
+var userSchema = mongoose.Schema(
     {
+        id: String,
         email: String,
-        password: String,
+        hash: String,
+        salt: String,
         parentName: String,
         relationship: String,
         childName: String,
@@ -13,6 +15,6 @@ let userSchema = mongoose.Schema(
     }
 );
 
-let userModel = mongoose.model("userModel", userSchema);
+var User = mongoose.model("User", userSchema);
 
-module.exports = userModel;
+module.exports = User;
