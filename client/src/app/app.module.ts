@@ -8,8 +8,9 @@ import { routes } from './app.routes';
 import { AuthService } from './services/auth.service';
 import { ScheduleService } from './services/schedule.service';
 import { SignupService } from './services/signup.service';
+import { DataService } from './services/data.service';
 
-import { CalendarComponent } from 'angular2-fullcalendar/src/calendar/calendar';
+// import { CalendarComponent } from 'angular2-fullcalendar/src/calendar/calendar';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -19,11 +20,12 @@ import { CurriculumComponent } from './components/curriculum/curriculum.componen
 import { Registration1Component } from './components/signup/registration-1/registration-1.component';
 import { Registration2Component } from './components/signup/registration-2/registration-2.component';
 import { Registration3Component } from './components/signup/registration-3/registration-3.component';
+import { Registration4Component } from './components/signup/registration-4/registration-4.component';
 import { SignupComponent } from './components/signup/signup/signup.component';
 
 @NgModule({
   declarations: [
-    CalendarComponent,
+    // CalendarComponent,
     AppComponent,
     NavbarComponent,
     HomeComponent,
@@ -32,7 +34,8 @@ import { SignupComponent } from './components/signup/signup/signup.component';
     Registration1Component,
     Registration2Component,
     Registration3Component,
-    SignupComponent
+    SignupComponent,
+    Registration4Component
   ],
   imports: [
     BrowserModule,
@@ -52,6 +55,9 @@ import { SignupComponent } from './components/signup/signup/signup.component';
     {
       provide: 'signUp',
       useClass: SignupService
+    },
+    { provide: 'data',
+      useClass: DataService
     }
   ],
   bootstrap: [AppComponent]

@@ -10,3 +10,10 @@ let classScheduleSchema = mongoose.Schema({
 let classScheduleModel = mongoose.model("classScheduleModel", classScheduleSchema);
 
 module.exports = classScheduleModel;
+
+
+
+
+
+
+
