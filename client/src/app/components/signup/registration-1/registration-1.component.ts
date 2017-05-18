@@ -34,7 +34,7 @@ export class Registration1Component implements OnInit {
   }
 
   nextStep() : void{
-    console.log(this.userInfo.email);
+    // console.log(this.userInfo.email);
     this.auth.user.email = this.userInfo.email;
     this.auth.user.password = this.userInfo.password;
 

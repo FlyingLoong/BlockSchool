@@ -13,8 +13,8 @@ router.get("/home", function(req, res) {});
 router.post("/users", jsonParser, function(req, res) {
     console.log("Get the add user request!");  //Debug output
     authService.addUser(req.body)
-            .then(function(user){res.json(user)},
-                  function(error){res.status(400).send("The email has been registered!")})
+            .then(function(count){res.json(count)},
+                  function(error){res.status(400).send("system error!")})
 });
 
 // Add new schedule into database

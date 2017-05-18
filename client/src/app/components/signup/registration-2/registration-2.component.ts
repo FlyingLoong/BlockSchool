@@ -32,7 +32,7 @@ export class Registration2Component implements OnInit {
 
 
   nextStep(): void {
-    console.log("user.email is " + this.auth.user.email);
+    // console.log("user.email is " + this.auth.user.email);
     this.auth.user.parentName = this.userInfo.parentName;
     this.auth.user.relationship = this.userInfo.relationship;
     this.auth.user.childName = this.userInfo.childName;
@@ -42,14 +42,17 @@ export class Registration2Component implements OnInit {
     this.auth.user.childInterest = this.userInfo.childInterest;
 
     this.auth.addNewUser()
-              .then (user => {
-                console.log(user); // Debug
+              .then ( count => {
+                // console.log('count' + count); // Debug
+                if(count === 0){
+                  console.log("User added");
+                }else if(count >= 1) {
+                  console.log("The email has been registered!")
+                }
                 //this._router.navigate(['signUp/registration-3']);
                 this._router.navigate(['signUp/registration-4']);
               })
-              .catch (
-                console.log("Add user fail!") // Debug
-              )
+              .catch ( error => console.log(error.body) );
 
     this.signUp.setProcessStatus('step3');
   }

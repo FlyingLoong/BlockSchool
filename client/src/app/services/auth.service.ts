@@ -32,9 +32,7 @@ export class AuthService {
                         .catch(this.handleError);
   }
 
-  getProfile(){
 
-  }
 
   // error handler
   private handleError(error: any): Promise<any> {

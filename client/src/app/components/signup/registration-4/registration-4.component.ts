@@ -166,6 +166,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       eventRender: this.eventRender.bind(this),
       dayRender: this.dayRender.bind(this),
       eventClick: this.eventClick.bind(this),
+      dayClick: this.dayClick.bind(this),
       eventAfterRender: this.eventAfterRender.bind(this),
       viewRender: this.changeTheme.bind(this)
     });
@@ -252,6 +253,10 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       this.courseIdRemoving = calEvent.id;
       jQuery('#cancelBookedCourseModal').modal('show');
     }
+  }
+
+  dayClick(date, jsEvent, view): void {
+    $('#calendar').fullCalendar('changeView', 'agendaWeek',date.format('YYYY-MM-DD'));
   }
 
   updateEvent(): void {
