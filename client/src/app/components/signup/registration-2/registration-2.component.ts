@@ -14,7 +14,7 @@ const DEFAULT_USER: User = Object.freeze({
   childGender: '',
   childBirthday: '',
   childInterest: ''
-})
+});
 
 @Component({
   selector: 'app-registration-2',
@@ -37,7 +37,7 @@ export class Registration2Component implements OnInit {
     this.auth.user.parentName = this.userInfo.parentName;
     this.auth.user.relationship = this.userInfo.relationship;
     this.auth.user.childName = this.userInfo.childName;
-    this.auth.user.childAge = this.userInfo.childAge;
+    this.auth.user.childAge = +this.userInfo.childAge;
     this.auth.user.childGender = this.userInfo.childGender;
     this.auth.user.childBirthday = this.userInfo.childBirthday;
     this.auth.user.childInterest = this.userInfo.childInterest;
@@ -45,10 +45,11 @@ export class Registration2Component implements OnInit {
     this.auth.addNewUser()
               .then ( count => {
                 // console.log('count' + count); // Debug
-                if(count === 0) {
+                if (count === 0) {
                   console.log('User added');
+                  this._router.navigate(['/signUp/registration-4']);
                 }else if (count >= 1) {
-                  console.log('The email has been registered!')
+                  console.log('The email has been registered!');
                 }
                 // this._router.navigate(['signUp/registration-3']);
                 this._router.navigate(['/signUp/registration-4']);

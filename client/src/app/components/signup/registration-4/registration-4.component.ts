@@ -137,7 +137,6 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   ngOnInit() {
     // get user profile
     this.person_email = '' + this.authZero.getProfile().email;
-    this.searchUserProfileByEmail(this.person_email);
 
     this.signUp.setProcessStatus('step3');
   }
@@ -148,6 +147,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     // load all of my booked courses
     if (this.person_id === '') {
       console.log('still can not access person id');
+      this.searchUserProfileByEmail(this.person_email);
     }else {
       console.log('The person id is: ' + this.person_id);
       console.log('The person is: ' + this.person_name);
@@ -344,16 +344,17 @@ export class Registration4Component implements OnInit, AfterViewInit  {
 
   // get the user profile from mLab
   searchUserProfileByEmail(user_email: string): void {
-    console.log('searchUserProfileByEmail(): ' + user_email);
+    console.log('searchUserProfileByEmail(user_email: string): ' + user_email);
     this.subscriptionUserProfile = this.auth.getUserProfileByEmail(user_email)
       .subscribe(profile => {
         this.userProfile = profile;
         // get the user profile
         this.person_name = this.userProfile.childName;
-        this.person_id = this.userProfile.id;
+        this.person_id = '' + this.userProfile.id;
         this.person_role = 'student';
-        console.log('searchUserProfileByEmail()- this.person_id: ' + this.person_id);
-       // this.searchMyBookedCourses();
+        console.log('searchUserProfileByEmail(user_email: string)- this.person_id: ' + this.person_id);
+        // automatically create people course profile in mLab
+        this.searchMyBookedCourses();
       });
   }
 

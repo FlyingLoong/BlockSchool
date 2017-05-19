@@ -29,17 +29,17 @@ export class Registration1Component implements OnInit {
 
   ngOnInit() {
     this.userInfo.email = this.authZero.getProfile().email;
-    this.signUp.setProcessStatus("step1");
+    this.signUp.setProcessStatus('step1');
   }
 
-  nextStep() : void{
+  nextStep(): void {
     console.log(this.userInfo.email);
     this.auth.user.email = this.userInfo.email;
 
     this.auth.user.phoneNumber = this.userInfo.phoneNumber;
     this.auth.user.address = this.userInfo.address;
 
-    this.signUp.setProcessStatus("step2");
+    this.signUp.setProcessStatus('step2');
 
     this._router.navigate(['/signUp/registration-2']);
   }

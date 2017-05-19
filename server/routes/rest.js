@@ -84,7 +84,6 @@ router.post("/removing/course/student/:id", jsonParser, function (req, res) {
 
 
 router.get("/search/profile/email/:email",function(req, res){
-    console.log("$$$$$$$$$$$$$$$$");
     var userEmail = req.params.email;
     authService.getProfileByEmail(userEmail)
         .then( function(profile){res.json(profile)},

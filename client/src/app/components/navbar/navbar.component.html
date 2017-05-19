@@ -22,7 +22,7 @@
         <li><a href="#">Pricing</a></li>
         <li><a href="#">FAQ</a></li>
         <li><a href="#">Contact Us</a></li>
-        <li><a href="#"*ngIf="authenticated()">My Course</a></li>
+        <li><a routerLink="signUp/myCourse" *ngIf="authenticated()">My Course</a></li>
         <li *ngIf="authenticated()"><a routerLink="signUp">Edit profile</a></li>
         <li class="navbar-spacer"></li>
         <li class="dropdown" *ngIf="authenticated()">
