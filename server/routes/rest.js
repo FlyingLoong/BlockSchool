@@ -13,8 +13,8 @@ router.get("/home", function(req, res) {});
 router.post("/users", jsonParser, function(req, res) {
     console.log("Get the add user request!");  //Debug output
     authService.addUser(req.body)
-            .then(function(count){res.json(count)},
-                  function(error){res.status(400).send("system error!")})
+            .then(function(user){res.json(user)},
+                  function(error){res.status(400).send("The email has been registered!")})
 });
 
 // Add new schedule into database
@@ -81,5 +81,15 @@ router.post("/removing/course/student/:id", jsonParser, function (req, res) {
             res.status(400).send("Sorry, Failed to remove.");
         });
 });
+
+
+router.get("/search/profile/email/:email",function(req, res){
+    console.log("$$$$$$$$$$$$$$$$");
+    var userEmail = req.params.email;
+    authService.getProfileByEmail(userEmail)
+        .then( function(profile){res.json(profile)},
+            function(error){res.status(400).send("Can't get the user profile!")})
+});
+
 
 module.exports = router;

@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class SignupService {
 
-  private step = new BehaviorSubject<string>("step1");
+  private step = new BehaviorSubject<string>( 'step1' );
 
   constructor() { }
 

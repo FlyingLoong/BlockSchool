@@ -21,3 +21,9 @@
   width: 150px;
   height: 25px;
 }
+
+.btn-no-color {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #777777
+}

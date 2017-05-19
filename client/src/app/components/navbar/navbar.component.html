@@ -16,20 +16,32 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <li class="active"><a href="#">Mission <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Mission</a></li>
         <li><a href="#">Curriculum</a></li>
         <li><a href="#">Teachers</a></li>
         <li><a href="#">Pricing</a></li>
         <li><a href="#">FAQ</a></li>
         <li><a href="#">Contact Us</a></li>
-
+        <li><a href="#"*ngIf="authenticated()">My Course</a></li>
+        <li *ngIf="authenticated()"><a routerLink="signUp">Edit profile</a></li>
         <li class="navbar-spacer"></li>
-
+        <li class="dropdown" *ngIf="authenticated()">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            {{username}}<span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a routerLink="/profile">My Profile</a></li>
+            <li><a href="#">My Favorites</a></li>
+            <li><a href="#">My Submissions</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#" (click)="logout()">Log Out</a></li>
+          </ul>
+        </li>
+        <!--
         <li><a routerLink="signIn">Sign in</a></li>
-        <li>
-          <form class="navbar-form">
-            <a class="btn btn-info" routerLink="signUp">Sign up</a>
-          </form>
+        -->
+        <li *ngIf="!authenticated()">
+        <a type="button" class="btn btn-no-color pull-left"  (click)="login()">Sign in</a>
         </li>
       </ul>
     </div><!-- /.navbar-collapse -->

@@ -13,24 +13,28 @@ var addUser = function (user) {
             User.count({email: user.email}, function (err, count) {
                 if (count === 0) {
 
+                    /*
                     // Encryption (random Salt + sha512)
                     var saltGenerated = "";
                     var hashGenerated = "";
                     crypto.randomBytes(128, function (err, salt) {
                         if (err) { throw err;}
                         saltGenerated = salt.toString("hex");
+                        console.log("salt: " + saltGenerated);
 
                         crypto.pbkdf2(user.password, saltGenerated, 4096, 512, "sha512", function (err, hash) {
                             if (err) { throw err; }
                             hashGenerated = hash.toString("hex");
+                            console.log("hash: " + hashGenerated);
                         })
                     });
+                    */
 
                     var newUser = new User({
-                        id:user.id,
+                        id: user.id,
                         email: user.email,
-                        hash: hashGenerated,
-                        salt: saltGenerated,
+                        phoneNumber: user.phoneNumber,
+                        address: user.address,
                         parentName: user.parentName,
                         relationship: user.relationship,
                         childName: user.childName,
@@ -40,10 +44,10 @@ var addUser = function (user) {
                         childInterests: user.childInterest
                     });
                     newUser.save();
-                    console.log(" New User Added !");
+                    console.log(" New User Profile Added !");
                     resolve(count);
                 } else if (count >= 1) {
-                    console.log("The email has been registered!")
+                    console.log("The email has been registered!");
                     resolve(count);
                 } else {
                     reject(err);
@@ -53,6 +57,25 @@ var addUser = function (user) {
 };
 
 
+
+
+var getProfileByEmail = function (user_email) {
+    return new Promise((resolve,reject) => {
+            User.findOne({email: user_email}, function (err, user) {
+            if (user) {
+                console.log("get user");
+                console.log(user);
+                resolve(user);
+            } else {
+                reject(err);
+            }
+        });
+});
+};
+
+
+
 module.exports = {
-    addUser: addUser
+    addUser: addUser,
+    getProfileByEmail: getProfileByEmail
 }

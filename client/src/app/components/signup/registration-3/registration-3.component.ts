@@ -21,41 +21,41 @@ export class Registration3Component implements OnInit {
   ngAfterViewInit() {
     this.calendarOptions = {
       header: {
-        left: "prev",
-        center: "title, today",
-        right: "next"
+        left: 'prev',
+        center: 'title, today',
+        right: 'next'
       },
-      defaultView: "agendaWeek",
+      defaultView: 'agendaWeek',
       events: [],
       allDaySlot: false,
       slotDuration: '00:40:00',
       dayClick: this.clickDay.bind(this),
       eventClick: this.clickEvent.bind(this)
-    }
+    };
   }
 
   clickDay(date, jsEvent, view): void {
     console.log(date.format());
-    let start = date.format();
-    let event: any = {
-      teacherEmail: "..",
-      title: "Scheduled",
+    const start = date.format();
+    const newEvent: any = {
+      teacherEmail: '..',
+      title: 'Scheduled',
       start: date.format()
     }
-    this.calendarOptions.events.push(event);
-    //this.calendarEvents.push("1");
-    $("#freeTrailScheduler").fullCalendar('renderEvent', event, true);
-    this.schedule.addScheduleEvent(event)
-                .then(event => {
+    this.calendarOptions.events.push(newEvent);
+    // this.calendarEvents.push("1");
+    $('#freeTrailScheduler').fullCalendar('renderEvent', newEvent, true);
+    this.schedule.addScheduleEvent(newEvent)
+                .then( event => {
                   this._router.navigate(['home']);
                 })
                 .catch(err => {
-                  console.log("cant add the schedule!");
-                })
+                  console.log('cant add the schedule!');
+                });
   }
 
   clickEvent(calEvent, jsEvent, view): void {
-    console.log("Event is clicked!");
+    console.log('Event is clicked!');
   }
 
 }

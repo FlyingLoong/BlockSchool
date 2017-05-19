@@ -2,20 +2,42 @@
   <div class="row">
     <div class="col-md-12 col-md-offset-1">
       <form #formRef="ngForm">
+        <!--
         <div class="form-group">
           <label for="email">Email</label>
           <input type="text" class="form-control" id="email" name="email" [(ngModel)]="userInfo.email" placeholder="Enter your email here!" required>
         </div>
+
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password here!" [(ngModel)]="userInfo.password">
-        </div><div class="form-group">
+        </div>
+
+        <div class="form-group">
           <label for="confirm_password">Confirm Password</label>
           <input type="password" class="form-control" id="confirm_password" name="confirm_password" required placeholder="Confirm your password here!">
         </div>
+        -->
 
-        <br/>
-        <input type="checkbox" id="readPrivacyPolicy" name="readPrivacyPolicy" value="readPrivacyPolicyChecked"><span style="color: gray">By clicking this, you agree that you have read our</span> <span>Pirvacy policy</span>. <br/>
+        <!-- Contact Info -->
+        <!-- Mobile Phone -->
+        <div class="form-group">
+          <label for="phoneNumber">Phone</label>
+          <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" [(ngModel)]="userInfo.phoneNumber" placeholder="Enter your phone number here!" required>
+        </div>
+
+        <!-- Address -->
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input type="text" class="form-control" id="address" name="address" [(ngModel)]="userInfo.address" placeholder="Enter your address here!" required>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div class="form-group">
+          <br/>
+          <input type="checkbox" id="readPrivacyPolicy" name="readPrivacyPolicy" value="readPrivacyPolicyChecked"><span style="color: gray"> By clicking this, you agree that you have read our</span> <span>Pirvacy policy</span>. <br/>
+        </div>
+
         <span class="submit-button"><button type="submit" class="btn btn-info" (click)="nextStep()">Next Step</button></span>
       </form>
     </div>

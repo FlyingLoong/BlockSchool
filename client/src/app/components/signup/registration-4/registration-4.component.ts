@@ -7,6 +7,7 @@ import { Course } from '../../../models/course.model';
 import { ModuleUnit } from '../../../models/module-unit.model';
 import { Project } from '../../../models/project.model';
 import { Person } from '../../../models/person.model';
+import { User } from '../../../models/user.model';
 import { Filter } from '../../../models/filter.model';
 import { Subscription } from 'rxjs/Subscription';
 import { Modal } from 'bootstrap/js/modal.js';
@@ -33,6 +34,21 @@ const DEFAULT_COURSE: Course = Object.freeze({
   booked: false
 });
 
+const DEFAULT_USER_PROFILE: User = Object.freeze({
+  id: '',
+  email: '',
+  phoneNumber: '',
+  address: '',
+  parentName: '',
+  relationship: '',
+  childName: '',
+  childAge: 5,
+  childGender: '',
+  childBirthday: '',
+  childInterest: ''
+});
+
+
 @Component({
   selector: 'app-registration-4',
   templateUrl: './registration-4.component.html',
@@ -40,8 +56,9 @@ const DEFAULT_COURSE: Course = Object.freeze({
 })
 export class Registration4Component implements OnInit, AfterViewInit  {
 
-  person_name = '';
+  person_email = '';
   person_id = '';
+  person_name = '';
   person_role = '';
 
   searchFilter: Filter = {
@@ -67,6 +84,9 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   modulesUnitsForSearch: ModuleUnit[] = [];
   moduleUnitDescForSearch = '';
   modulesUnits: ModuleUnit[] = [];
+
+  userProfile: User = Object.assign({}, DEFAULT_USER_PROFILE);
+  subscriptionUserProfile: Subscription;
 
   teachersForSearch: Person[] = [];
   teachers: Person[] = [];
@@ -112,33 +132,29 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       'border-color': '#c9c9c9'
     },
   };
-
-  constructor( @Inject('data') private data, @Inject('signUp') private signUp, private router: Router ) { }
+  constructor( @Inject('data') private data, @Inject('auth') private auth,  @Inject('authZero') private authZero, @Inject('signUp') private signUp, private router: Router ) { }
 
   ngOnInit() {
+    // get user profile
+    this.person_email = '' + this.authZero.getProfile().email;
+    this.searchUserProfileByEmail(this.person_email);
 
     this.signUp.setProcessStatus('step3');
-
-    // get my profile by authGuard.getProfile()
-    // this.person_name = this.authGuard.getProfile().name;
-    // this.person_id = this.authGuard.getProfile().id;
-    // this.person_role = this.authGuard.getProfile().role;
-
-    // Mock: get my profile (role: student)
-    this.person_name = 'Bob';
-    this.person_id = '1e0ate67';
-    this.person_role = 'student';
   }
 
   ngAfterViewInit() {
     // load an empty calendar
     this.courseCalendar();
     // load all of my booked courses
-    this.searchMyBookedCourses();
-    this.changeTheme();
+    if (this.person_id === '') {
+      console.log('still can not access person id');
+    }else {
+      console.log('The person id is: ' + this.person_id);
+      console.log('The person is: ' + this.person_name);
+      this.searchMyBookedCourses();
+      this.changeTheme();
+    };
 
-    // Observe my booked courses
-    // this.searchMyBookedCourses();
   }
 
   courseCalendar(): void {
@@ -256,7 +272,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   }
 
   dayClick(date, jsEvent, view): void {
-    $('#calendar').fullCalendar('changeView', 'agendaWeek',date.format('YYYY-MM-DD'));
+    $('#calendar').fullCalendar('changeView', 'agendaWeek', date.format('YYYY-MM-DD'));
   }
 
   updateEvent(): void {
@@ -325,8 +341,24 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       });
   }
 
+
+  // get the user profile from mLab
+  searchUserProfileByEmail(user_email: string): void {
+    console.log('searchUserProfileByEmail(): ' + user_email);
+    this.subscriptionUserProfile = this.auth.getUserProfileByEmail(user_email)
+      .subscribe(profile => {
+        this.userProfile = profile;
+        // get the user profile
+        this.person_name = this.userProfile.childName;
+        this.person_id = this.userProfile.id;
+        this.person_role = 'student';
+        console.log('searchUserProfileByEmail()- this.person_id: ' + this.person_id);
+       // this.searchMyBookedCourses();
+      });
+  }
+
   // when select project in modal , immediately update the corresponding teachers list
-  searchTeachersByProject() {
+  searchTeachersByProject(): void {
     // update the project description
     this.projectDescForSearch = this.projectsForSearch.find(value => value.id === this.searchFilter.project_id).desc;
     // update the corresponding teachers list
@@ -473,7 +505,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   }
 
   // When the select moduleUnit, immediately update the course desc
-  updateModuleUnitTitleAndDesc(){
+  updateModuleUnitTitleAndDesc() {
     this.newCourse.title = this.modulesUnits.find(value => value.id === this.moduleUnitIdForLabel).title;
     this.newCourse.desc = this.modulesUnits.find(value => value.id === this.moduleUnitIdForLabel).desc;
   }
@@ -570,8 +602,8 @@ export class Registration4Component implements OnInit, AfterViewInit  {
                 <p><span class ="glyphicon glyphicon-time"></span> ${event.start.format('MMMM Do YYYY, h:mm:ss a')}</p>
                 <p><span class ="glyphicon glyphicon-arrow-right"></span> ${event.end.format('MMMM Do YYYY, h:mm:ss a')}</p>
                `,
-      delay: { "show": 1000, "hide": 100 },
-      placement:'auto', container: 'body',
+      delay: { 'show': 1000, 'hide': 100 },
+      placement: 'auto', container: 'body',
       trigger: 'hover',
       html: true
     });

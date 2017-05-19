@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 const DEFAULT_USER: User = Object.freeze({
   id: '',
   email: '',
-  password: '',
+  phoneNumber: '',
+  address: '',
   parentName: '',
   relationship: '',
   childName: '',
@@ -44,13 +45,13 @@ export class Registration2Component implements OnInit {
     this.auth.addNewUser()
               .then ( count => {
                 // console.log('count' + count); // Debug
-                if(count === 0){
-                  console.log("User added");
-                }else if(count >= 1) {
-                  console.log("The email has been registered!")
+                if(count === 0) {
+                  console.log('User added');
+                }else if (count >= 1) {
+                  console.log('The email has been registered!')
                 }
-                //this._router.navigate(['signUp/registration-3']);
-                this._router.navigate(['signUp/registration-4']);
+                // this._router.navigate(['signUp/registration-3']);
+                this._router.navigate(['/signUp/registration-4']);
               })
               .catch ( error => console.log(error.body) );
 

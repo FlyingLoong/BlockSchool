@@ -6,7 +6,7 @@ import { Registration4Component } from './components/signup/registration-4/regis
 import { HomeComponent } from './components/home/home.component';
 import { Routes, RouterModule } from '@angular/router';
 
-const SIGN_UP_ROUTES: Routes = [
+const PROFILE_SIGN_UP_ROUTES: Routes = [
   {
     path: 'registration-1',
     component: Registration1Component
@@ -15,10 +15,10 @@ const SIGN_UP_ROUTES: Routes = [
     path: 'registration-2',
     component: Registration2Component
   },
-  {
-    path: 'registration-3',
-    component: Registration3Component
-  },
+  //{
+    //path: 'registration-3',
+    //component: Registration3Component
+  //},
   {
     path: 'registration-4',
     component: Registration4Component
@@ -31,18 +31,18 @@ const SIGN_UP_ROUTES: Routes = [
 
 const APP_ROUTES: Routes = [
   {
+    path: 'home',
+    component: HomeComponent
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
   },
   {
-    path: 'home',
-    component: HomeComponent
-  },
-  {
     path: 'signUp',
     component: SignupComponent,
-    children: SIGN_UP_ROUTES
+    children: PROFILE_SIGN_UP_ROUTES
   },
   {
     path: '**',

@@ -2,20 +2,24 @@ import { User } from './../models/user.model';
 
 import { Injectable } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
+
 const DEFAULT_USER = Object.freeze({
-  id:"",
-  email: "",
-  password: "",
-  parentName: "",
-  relationship: "",
-  childName: "",
+  id: '',
+  email: '',
+  phoneNumber: '',
+  address: '',
+  parentName: '',
+  relationship: '',
+  childName: '',
   childAge: 5,
-  childGender: "",
-  childBirthday: "",
-  childInterest: ""
-})
+  childGender: '',
+  childBirthday: '',
+  childInterest: ''
+});
 
 
 @Injectable()
@@ -23,13 +27,27 @@ export class AuthService {
 
   user: User = Object.assign({}, DEFAULT_USER);
 
+  private userProfileSource = new BehaviorSubject<User>(this.user);
+
   constructor(private http: Http) { }
 
   addNewUser(): Promise<User> {
-    let headers = new Headers({'content-type': 'application/json'});
+    const headers = new Headers({'content-type': 'application/json'});
     return this.http.post('/api/v1/users', this.user, headers).toPromise()
-                        .then((res: Response) => {return res.json()})
+                        .then((res: Response) => { return res.json(); })
                         .catch(this.handleError);
+  }
+
+  getUserProfileByEmail(user_email: string): Observable<User> {
+    this.http.get(`api/v1/search/profile/email/${user_email}`)
+      .toPromise()
+      .then((res: Response) => {
+        this.userProfileSource.next(res.json());
+      })
+      .catch(this.handleError);
+
+    return this.userProfileSource.asObservable();
+
   }
 
 
@@ -40,5 +58,3 @@ export class AuthService {
     return Promise.reject(error.body || error);
   }
 }
-
-

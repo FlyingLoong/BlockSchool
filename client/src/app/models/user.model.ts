@@ -1,7 +1,8 @@
 export class User {
   id: string;
   email: string;
-  password: string;
+  phoneNumber: string;
+  address: string;
   parentName: string;
   relationship: string;
   childName: string;

@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { routes } from './app.routes';
 
 import { AuthService } from './services/auth.service';
+import { AuthZeroService } from './services/auth-zero.service';
 import { ScheduleService } from './services/schedule.service';
 import { SignupService } from './services/signup.service';
 import { DataService } from './services/data.service';
@@ -22,6 +23,7 @@ import { Registration2Component } from './components/signup/registration-2/regis
 import { Registration3Component } from './components/signup/registration-3/registration-3.component';
 import { Registration4Component } from './components/signup/registration-4/registration-4.component';
 import { SignupComponent } from './components/signup/signup/signup.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -34,8 +36,9 @@ import { SignupComponent } from './components/signup/signup/signup.component';
     Registration1Component,
     Registration2Component,
     Registration3Component,
+    Registration4Component,
     SignupComponent,
-    Registration4Component
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +51,9 @@ import { SignupComponent } from './components/signup/signup/signup.component';
       provide: 'auth',
       useClass: AuthService
     },
+    {
+      provide:"authZero",
+      useClass:AuthZeroService},
     {
       provide: 'schedule',
       useClass: ScheduleService

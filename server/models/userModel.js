@@ -3,8 +3,8 @@ var userSchema = mongoose.Schema(
     {
         id: String,
         email: String,
-        hash: String,
-        salt: String,
+        phoneNumber: String,
+        address: String,
         parentName: String,
         relationship: String,
         childName: String,

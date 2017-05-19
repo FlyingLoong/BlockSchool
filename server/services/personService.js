@@ -17,7 +17,137 @@ var getProjectsByPerson = function (person_id, role) {
                     telephone: "",
                     sex: "",
                     age: "",
-                    projects: [],
+                    projects: [
+                        {
+                            "id": "c59c93db-1777-4cf3-84a8-507e0rcd0647",
+                            "name": "CS503 Programming",
+                            "desc": "Have you ever wondered how computers work? In this course, we'll get to the bottom of this question.",
+                            "type": "private",
+                            "modulesUnits": [
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0521",
+                                    "title": "CS503 Class 1",
+                                    "desc": "Variables"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0522",
+                                    "title": "CS503 Class 2",
+                                    "desc": "Numbers"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0523",
+                                    "title": "CS503 Class 3",
+                                    "desc": "Strings"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0524",
+                                    "title": "CS503 Class 4",
+                                    "desc": "Lists"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0525",
+                                    "title": "CS503 Class 5",
+                                    "desc": "Conditions"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0526",
+                                    "title": "CS503 Class 6",
+                                    "desc": "Loops"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0527",
+                                    "title": "CS503 Class 7",
+                                    "desc": "Functions"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "c82c93db-1234-4cf3-84a8-506e0rcd0644",
+                            "name": "CS507 Git",
+                            "desc": "In this course, we'll dive into Git, a version control system for tracking changes in files and coordinating work on them in teams",
+                            "type": "private",
+                            "modulesUnits": [
+                                {
+                                    "id": "c82c93db-12s4-3cf3-84a8-507e0rcd0121",
+                                    "title": "CS507 Class 1",
+                                    "desc": "Logging"
+                                },
+                                {
+                                    "id": "c82c93db-12s4-3cf3-84a8-507e0rcd0122",
+                                    "title": "CS507 Class 2",
+                                    "desc": "Head"
+                                },
+                                {
+                                    "id": "c82c93db-12s4-3cf3-84a8-507e0rcd0123",
+                                    "title": "CS507 Class 3",
+                                    "desc": "Tagging"
+                                },
+                                {
+                                    "id": "c82c93db-12s4-3cf3-84a8-507e0rcd0124",
+                                    "title": "CS507 Class 4",
+                                    "desc": "Branches"
+                                },
+                                {
+                                    "id": "c82c93db-12s4-3cf3-84a8-507e0rcd0125",
+                                    "title": "CS507 Class 5",
+                                    "desc": "Repositories"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "c79c93db-1757-4cf3-84a8-507h0rcd0662",
+                            "name": "CS501 Python",
+                            "desc": "In this course, we'll look into Python, a simple but powerful programming language",
+                            "type": "private",
+                            "modulesUnits": [
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0461",
+                                    "title": "CS501 Class 1",
+                                    "desc": "Basics"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0462",
+                                    "title": "CS501 Class 2",
+                                    "desc": "Variable and types"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0463",
+                                    "title": "CS501 Class 3",
+                                    "desc": "Strings"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0464",
+                                    "title": "CS501 Class 4",
+                                    "desc": "Booleans"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0465",
+                                    "title": "CS501 Class 5",
+                                    "desc": "Conditional statements"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0466",
+                                    "title": "CS501 Class 6",
+                                    "desc": "Lists"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0467",
+                                    "title": "CS501 Class 7",
+                                    "desc": "Loops"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0468",
+                                    "title": "CS501 Class 8",
+                                    "desc": "Functions"
+                                },
+                                {
+                                    "id": "c79c97db-17g7-4cu2-84a8-507h0rcd0469",
+                                    "title": "CS501 Class 9",
+                                    "desc": "Classes"
+                                }
+                            ]
+                        }
+                    ],
                     courses: [],
                     contact: {tel: "", wechat: ""}
                 });

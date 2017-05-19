@@ -7,9 +7,8 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class ScheduleService {
 
-  constructor(private http: Http) { }
-
   scheduleSource = new BehaviorSubject<any[]>([]);
+  constructor(private http: Http) { }
 
   getScheduleEvents(teacherEmail: string): Observable<any> {
     this.http.get(`api/v1/events/${teacherEmail}`).toPromise()
@@ -20,10 +19,10 @@ export class ScheduleService {
   }
 
   addScheduleEvent(event: Object): Promise<any> {
-    let headers = new Headers({'content-type': 'application/json'});
+    const headers = new Headers({'content-type': 'application/json'});
     return this.http.post('/api/v1/events', event, headers).toPromise()
                         .then((res: Response) => {return res.json()})
-                        .catch()
+                        .catch();
   }
 
   deleteScheduleEvents(events: Object[]): void {}
