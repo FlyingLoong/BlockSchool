@@ -1,6 +1,7 @@
 import { User } from './../../../models/user.model';
 import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 const DEFAULT_USER: User = Object.freeze({
   id: '',
@@ -10,9 +11,9 @@ const DEFAULT_USER: User = Object.freeze({
   parentName: '',
   relationship: '',
   childName: '',
-  childAge: 5,
+  childAge: '',
   childGender: '',
-  childBirthday: '',
+  childBirthday: null,
   childInterest: ''
 });
 
@@ -39,7 +40,7 @@ export class Registration2Component implements OnInit {
     this.auth.user.childName = this.userInfo.childName;
     this.auth.user.childAge = +this.userInfo.childAge;
     this.auth.user.childGender = this.userInfo.childGender;
-    this.auth.user.childBirthday = this.userInfo.childBirthday;
+    this.auth.user.childBirthday = moment(this.userInfo.childBirthday, 'YYYY-MM-DD');
     this.auth.user.childInterest = this.userInfo.childInterest;
 
     this.auth.addNewUser()

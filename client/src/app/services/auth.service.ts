@@ -15,9 +15,9 @@ const DEFAULT_USER = Object.freeze({
   parentName: '',
   relationship: '',
   childName: '',
-  childAge: 5,
+  childAge: '',
   childGender: '',
-  childBirthday: '',
+  childBirthday: null,
   childInterest: ''
 });
 
@@ -49,7 +49,6 @@ export class AuthService {
     return this.userProfileSource.asObservable();
 
   }
-
 
 
   // error handler

@@ -6,8 +6,8 @@ export class User {
   parentName: string;
   relationship: string;
   childName: string;
-  childAge: number;
+  childAge: string;
   childGender: string;
-  childBirthday: string;
+  childBirthday: any;
   childInterest: string;
 }

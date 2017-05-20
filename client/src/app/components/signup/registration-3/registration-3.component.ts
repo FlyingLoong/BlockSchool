@@ -18,6 +18,7 @@ export class Registration3Component implements OnInit {
     this.signUp.setProcessStatus('step3');
   }
 
+/*
   ngAfterViewInit() {
     this.calendarOptions = {
       header: {
@@ -58,4 +59,5 @@ export class Registration3Component implements OnInit {
     console.log('Event is clicked!');
   }
 
+ */
 }

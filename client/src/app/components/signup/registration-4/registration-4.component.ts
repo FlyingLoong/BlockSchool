@@ -42,9 +42,9 @@ const DEFAULT_USER_PROFILE: User = Object.freeze({
   parentName: '',
   relationship: '',
   childName: '',
-  childAge: 5,
+  childAge: '',
   childGender: '',
-  childBirthday: '',
+  childBirthday: null,
   childInterest: ''
 });
 
@@ -142,18 +142,15 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   }
 
   ngAfterViewInit() {
-    // load an empty calendar
-    this.courseCalendar();
-    // load all of my booked courses
     if (this.person_id === '') {
       console.log('still can not access person id');
       this.searchUserProfileByEmail(this.person_email);
-    }else {
+    } else {
       console.log('The person id is: ' + this.person_id);
       console.log('The person is: ' + this.person_name);
       this.searchMyBookedCourses();
       this.changeTheme();
-    };
+    }
 
   }
 
@@ -344,15 +341,15 @@ export class Registration4Component implements OnInit, AfterViewInit  {
 
   // get the user profile from mLab
   searchUserProfileByEmail(user_email: string): void {
-    console.log('searchUserProfileByEmail(user_email: string): ' + user_email);
     this.subscriptionUserProfile = this.auth.getUserProfileByEmail(user_email)
       .subscribe(profile => {
+        console.log(profile);
         this.userProfile = profile;
         // get the user profile
         this.person_name = this.userProfile.childName;
         this.person_id = '' + this.userProfile.id;
         this.person_role = 'student';
-        console.log('searchUserProfileByEmail(user_email: string)- this.person_id: ' + this.person_id);
+        console.log('searchUserProfileByEmail - person_id :' + this.person_id);
         // automatically create people course profile in mLab
         this.searchMyBookedCourses();
       });

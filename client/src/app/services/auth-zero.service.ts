@@ -14,7 +14,10 @@ export class AuthZeroService {
 
   // Observe usernameSource
   private username = '';
+  private email = '';
   private usernameSource = new BehaviorSubject<String>('');
+
+  private checkUserInfoCompleteSource = new BehaviorSubject<boolean>(false);
 
   // select a supported language and the size of the buttons for the social providers
   options = {
@@ -70,18 +73,22 @@ export class AuthZeroService {
         localStorage.setItem('profile', JSON.stringify(profile));
 
         this.username = profile.nickname;
+        this.email = profile.email;
         // BehaviorSubject ( also Observable ) usernameSource deliver the username value to its Observer
         this.usernameSource.next(this.username);
+
+        // When got the email, check whether the user basic info completed.
+        this.checkUserInfoComplete();
       });
 
     });
     // Print token and profile in localStorage
-    console.log('id_token (in localStorage): ' + localStorage.getItem('id_token'));
-    console.log('accessToken (in localStorage): ' + localStorage.getItem('accessToken'));
-    console.log('profile (in localStorage): ' + localStorage.getItem('profile'));
+    // console.log('id_token (in localStorage): ' + localStorage.getItem('id_token'));
+    // console.log('accessToken (in localStorage): ' + localStorage.getItem('accessToken'));
+    // console.log('profile (in localStorage): ' + localStorage.getItem('profile'));
 
     // Print member
-    console.log('username (String)' + this.username);
+    // console.log('username (String)' + this.username);
   }
 
   public authenticated() {
@@ -152,8 +159,25 @@ export class AuthZeroService {
         console.log(res.json());
       })
       .catch(this.handleError);
-  }
+  };
 
+
+  public checkUserInfoComplete(): Observable<boolean> {
+    if (this.email !== '') {
+      this.http.get(`api/v1/search/profile/email/${this.email}`)
+        .toPromise()
+        .then((res: Response) => {
+          this.checkUserInfoCompleteSource.next(true);
+        })
+        .catch((e) => {
+          this.checkUserInfoCompleteSource.next(false);
+        });
+    };
+
+    this.checkUserInfoCompleteSource.next(false);
+
+    return this.checkUserInfoCompleteSource.asObservable();
+  }
   // error handler
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);

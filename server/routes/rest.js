@@ -13,16 +13,18 @@ router.get("/home", function(req, res) {});
 router.post("/users", jsonParser, function(req, res) {
     console.log("Get the add user request!");  //Debug output
     authService.addUser(req.body)
-            .then(function(user){res.json(user)},
-                  function(error){res.status(400).send("The email has been registered!")})
+        .then(function(user){res.json(user)},
+            function(error){res.status(400).send("The email has been registered!")})
 });
 
+
+/*
 // Add new schedule into database
 router.post("/events", jsonParser, function(req, res) {
     console.log("Get the add events request!");  //Debug output
     scheduleService.addSchedule(req.body)
-                    .then(function(event){res.json(event)},
-                          function(error){res.status(400).send("The class has been scheduled!")})
+        .then(function(event){res.json(event)},
+            function(error){res.status(400).send("The class has been scheduled!")})
 
 });
 
@@ -30,10 +32,10 @@ router.post("/events", jsonParser, function(req, res) {
 router.get("/events/:teacherEmail", function(req, res) {
     console.log("Get the get events request!"); //Debug output
     scheduleService.getSchedules(teacherEmail)
-                    .then(function(schedules){res.json(schedules)},
-                          function(error){res.status(400).send("Can't get the scheduled classes!")})
+        .then(function(schedules){res.json(schedules)},
+            function(error){res.status(400).send("Can't get the scheduled classes!")})
 });
-
+*/
 
 
 // RESTful api By Oliver
@@ -85,9 +87,15 @@ router.post("/removing/course/student/:id", jsonParser, function (req, res) {
 
 router.get("/search/profile/email/:email",function(req, res){
     var userEmail = req.params.email;
+    console.log('req.params.email: ' + userEmail);
     authService.getProfileByEmail(userEmail)
-        .then( function(profile){res.json(profile)},
-            function(error){res.status(400).send("Can't get the user profile!")})
+        .then( function(profile){
+            console.log('profile return: ');
+            console.log(profile);
+            res.json(profile);
+        }, function (error) {
+            res.status(400).send("Can't get the user profile!");
+        });
 });
 
 

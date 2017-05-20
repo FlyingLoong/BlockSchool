@@ -11,10 +11,14 @@ export class NavbarComponent implements OnInit {
   username = '';
   subscriptionUsername: Subscription;
 
-  constructor(@Inject("authZero") private authZero, @Inject("auth") private auth) { }
+  activeNavBarMyCourseButtonState = false;
+  subscriptionChangeActiveState: Subscription;
+
+  constructor(@Inject('authZero') private authZero, @Inject('auth') private auth) { }
 
   ngOnInit() {
     this.getUsername();
+    this.subscribeChangeActiveState();
   }
 
   login(): void {
@@ -30,8 +34,13 @@ export class NavbarComponent implements OnInit {
       .subscribe(username => this.username = username);
   }
 
-  authenticated(): boolean{
+  authenticated(): boolean {
     return this.authZero.authenticated();
+  }
+
+  subscribeChangeActiveState(): void {
+    this.subscriptionChangeActiveState = this.authZero.checkUserInfoComplete()
+      .subscribe(result => this.activeNavBarMyCourseButtonState = result);
   }
 
 

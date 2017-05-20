@@ -10,9 +10,9 @@ const DEFAULT_USER: User = Object.freeze({
   parentName: '',
   relationship: '',
   childName: '',
-  childAge: 5,
+  childAge: '',
   childGender: '',
-  childBirthday: '',
+  childBirthday: null,
   childInterest: ''
 });
 

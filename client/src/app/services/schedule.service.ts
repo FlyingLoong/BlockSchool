@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class ScheduleService {
-
+/*
   scheduleSource = new BehaviorSubject<any[]>([]);
   constructor(private http: Http) { }
 
@@ -26,5 +26,5 @@ export class ScheduleService {
   }
 
   deleteScheduleEvents(events: Object[]): void {}
-
+*/
 }

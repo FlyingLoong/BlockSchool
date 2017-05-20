@@ -13,12 +13,11 @@ export class ProfileComponent implements OnInit {
   constructor( @Inject('authZero') private authZero) { }
 
   ngOnInit() {
-    let profile = this.authZero.getProfile();
-    if(profile){
+    const profile = this.authZero.getProfile();
+    if (profile) {
       this.email = profile.email;
       this.username = profile.nickname;
-    }
-    else{console.log('Failed to get profile!')}
+    } else {console.log('Failed to get profile!')}
   }
 
   resetPassword() {
