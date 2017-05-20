@@ -24,14 +24,21 @@
   display: block;
 }
 
-.horizontal-small-blocks {
-  width: 100px;
+.unversity-log {
+  width: 115px;
   height: 35px;
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+
+.horizontal-small-blocks {
+  width: 85px;
+  height: 55px;
 }
 
 .vertical-small-blocks {
-  width: 35px;
-  height: 100px;
+  width: 55px;
+  height: 85px;
 }
 
 .pricing-table {

@@ -22,13 +22,19 @@ export default StyleSheet.create({
   'p-content': {
     'display': 'block'
   },
+  'unversity-log': {
+    'width': [{ 'unit': 'px', 'value': 115 }],
+    'height': [{ 'unit': 'px', 'value': 35 }],
+    'marginTop': [{ 'unit': 'px', 'value': 10 }],
+    'marginBottom': [{ 'unit': 'px', 'value': 50 }]
+  },
   'horizontal-small-blocks': {
-    'width': [{ 'unit': 'px', 'value': 100 }],
-    'height': [{ 'unit': 'px', 'value': 35 }]
+    'width': [{ 'unit': 'px', 'value': 85 }],
+    'height': [{ 'unit': 'px', 'value': 55 }]
   },
   'vertical-small-blocks': {
-    'width': [{ 'unit': 'px', 'value': 35 }],
-    'height': [{ 'unit': 'px', 'value': 100 }]
+    'width': [{ 'unit': 'px', 'value': 55 }],
+    'height': [{ 'unit': 'px', 'value': 85 }]
   },
   'pricing-table': {
     'width': [{ 'unit': '%H', 'value': 1 }],
