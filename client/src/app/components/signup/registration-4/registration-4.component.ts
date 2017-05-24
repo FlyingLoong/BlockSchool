@@ -137,21 +137,18 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   ngOnInit() {
     // get user profile
     this.person_email = '' + this.authZero.getProfile().email;
-
+    // subscribe in observer mode
+    this.searchUserProfileByEmail();
+    this.searchMyBookedCourses();
+    this.searchMyProjects();
+    this.searchCoursesByTeacher();
+    this.searchTeachersByProject();
     this.signUp.setProcessStatus('step3');
   }
 
   ngAfterViewInit() {
-    if (this.person_id === '') {
-      console.log('still can not access person id');
-      this.searchUserProfileByEmail(this.person_email);
-    } else {
-      console.log('The person id is: ' + this.person_id);
-      console.log('The person is: ' + this.person_name);
-      this.searchMyBookedCourses();
-      this.changeTheme();
-    }
-
+    // load an empty calendar
+    this.courseCalendar();
   }
 
   courseCalendar(): void {
@@ -162,18 +159,15 @@ export class Registration4Component implements OnInit, AfterViewInit  {
         right: 'month,agendaWeek'
       },
       height: 450,
-      // width vs height
       aspectRatio: 'auto',
       editable: this.editableOption,
       events: this.courses,
-      eventLimit: this.eventLimitOption, // allow "more" link when too many events
+      eventLimit: this.eventLimitOption,
       eventColor: '#ffffff',
       eventTextColor: '#5bc0de',
       eventBorderColor: '#ffffff',
-
       // record as utc in server, yet display local time on calendar
       timezone: 'local',
-
       selectable: this.selectableOption,
       select: this.select.bind(this),
       eventRender: this.eventRender.bind(this),
@@ -186,13 +180,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   }
 
   select(start, end, allDay): void {
-    // only when current view is agendaWeek and bookingButton is on
     if ($('#calendar').fullCalendar('getView').name === 'agendaWeek' && this.bookingButtonState) {
-      // when click on a calendar cell in agendaWeek, immediately record the time and invoke bookCourse() method
-      // timezone: 'local', so the date on calendar is the local time.
-      // both "start" and "end" still store UTC though always put the corresponding local time on the calendar
-      // p.s. the UTC time will be stored in Mlab
-      // invoke this.openBookingModal() method
       this.openBookingModal(start, end);
     }
   }
@@ -225,6 +213,35 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     this.paintEvents();
     this.changeTheme();
 
+  }
+
+  changeCSS(element: any, key: string): void {
+    $(element).css('background-color', this.cssMap[key]['background-color']);
+    $(element).css('border-color', this.cssMap[key]['border-color']);
+  }
+
+  paintEvents(): void {
+    // event title
+    $('#calendar span.fc-title').css({
+      'color': '#5bc0de',
+    });
+    // event time
+    $('#calendar span.fc-time').css({
+      'color': '#5bc0de',
+    });
+  }
+  // In keeping with the style of homepage
+  changeTheme(): void {
+    // Month Year
+    $('#calendar h2').css('color', '#777777');
+    // week
+    $('#calendar span').css({
+      'color': '#777777',
+    });
+    // day
+    $('#calendar span.fc-day-number').css({
+      'color': '#777777',
+    });
   }
   dayRender(date: any, cell: any): void {
     this.currentView = $('#calendar').fullCalendar('getView');
@@ -261,7 +278,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
   }
 
   eventClick(calEvent, view): void {
-    // Only those courses I booked can be canceled
+    // Only those courses I booked can be canceled and removed from my courses
     if (this.bookingButtonState && (calEvent.student_id === this.person_id)) {
       this.courseIdRemoving = calEvent.id;
       jQuery('#cancelBookedCourseModal').modal('show');
@@ -272,100 +289,68 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     $('#calendar').fullCalendar('changeView', 'agendaWeek', date.format('YYYY-MM-DD'));
   }
 
-  updateEvent(): void {
-    const eventClient = $('#calendar').fullCalendar('clientEvents');
-    eventClient[3].title = 'xxx';
-    for (let i = 0 ; i < eventClient.length ; i++) {
-    }
-  }
-
-  changeCSS(element: any, key: string): void {
-    $(element).css('background-color', this.cssMap[key]['background-color']);
-    $(element).css('border-color', this.cssMap[key]['border-color']);
-  }
-
-  // In keeping with the style of homepage
-  changeTheme(): void {
-    // Month Year
-    $('#calendar h2').css('color', '#777777');
-    // week
-    $('#calendar span').css({
-      'color': '#777777',
-    });
-    // day
-    $('#calendar span.fc-day-number').css({
-      'color': '#777777',
-    });
-  }
-
-  paintEvents(): void {
-    // event title
-    $('#calendar span.fc-title').css({
-      'color': '#5bc0de',
-    });
-    // event time
-    $('#calendar span.fc-time').css({
-      'color': '#5bc0de',
-    });
-  }
-
-  // Press "Search" button to activate the search modal, then:
-  // 1.immediately initiate the projects and teachers list
-  // 2.immediately initiate the searchFilter
-  // 3.invoke searchMyProjects() method
-  initSearchModal(): void {
-    // 1
-    this.projectsForSearch = [];
-    this.projectDescForSearch = '';
-    this.teachersForSearch = [];
-    this.modulesUnitsForSearch = [];
-    this.moduleUnitDescForSearch = '';
-    // 2
-    this.searchFilter.project_id = '';
-    this.searchFilter.teacher_id = '';
-    this.searchFilter.module_unit_id = '';
-    // 3
-    this.searchMyProjects();
-  }
-
-  // Get all of your projects and update the projects list in search modal
-  searchMyProjects(): void {
-    this.projectsForSearch = [];
-    this.projectDescForSearch = '';
-    this.subscriptionProjects = this.data.getProjectsByPerson(this.person_id, 'student')
-      .subscribe(projects => {
-        this.projectsForSearch = projects;
-      });
-  }
-
-
   // get the user profile from mLab
-  searchUserProfileByEmail(user_email: string): void {
-    this.subscriptionUserProfile = this.auth.getUserProfileByEmail(user_email)
+  searchUserProfileByEmail(): void {
+    this.subscriptionUserProfile = this.auth.getUserProfileByEmail(this.person_email)
       .subscribe(profile => {
-        console.log(profile);
         this.userProfile = profile;
         // get the user profile
         this.person_name = this.userProfile.childName;
         this.person_id = '' + this.userProfile.id;
         this.person_role = 'student';
-        console.log('searchUserProfileByEmail - person_id :' + this.person_id);
         // automatically create people course profile in mLab
-        this.searchMyBookedCourses();
+        this.data.getMyBookedCoursesByStudent(this.person_id, 'student'); // (observer mode)
       });
   }
 
-  // when select project in modal , immediately update the corresponding teachers list
-  searchTeachersByProject(): void {
-    // update the project description
-    this.projectDescForSearch = this.projectsForSearch.find(value => value.id === this.searchFilter.project_id).desc;
-    // update the corresponding teachers list
+  searchMyBookedCourses(): void {
+    this.myBookedCourses = [];
+    this.subscriptionMyBookedCourses = this.data.getMyBookedCoursesByStudent(this.person_id, 'student')
+      .subscribe(courses => {
+        this.myBookedCourses = courses;
+        this.courses = this.myBookedCourses;
+        // invoke displayMyCoursesCalendar() method
+        this.displayMyCoursesCalendar();
+
+      });
+  }
+
+  searchMyProjects(): void {
+    this.subscriptionProjects = this.data.getProjectsByPerson(this.person_id, 'student')
+      .subscribe(projects => {
+        this.projectsForSearch = projects;
+      });
+  }
+  afterNavBarSearchButtonPressed(): void {
+    // clear the previous list before updating
+    this.projectsForSearch = [];
+    this.projectDescForSearch = '';
     this.teachersForSearch = [];
+    this.modulesUnitsForSearch = [];
+    this.moduleUnitDescForSearch = '';
+    this.searchFilter.project_id = '';
+    this.searchFilter.teacher_id = '';
+    this.searchFilter.module_unit_id = '';
+    // update and display the projects list by student ID
+    this.data.getProjectsByPerson(this.person_id, 'student'); // observer mode
+  }
+
+  searchTeachersByProject(): void {
     const project_id = this.searchFilter.project_id;
     this.subscriptionTeachers = this.data.getTeachersByProject(project_id)
       .subscribe(teachers => {
         this.teachersForSearch = teachers;
       });
+  }
+  // when select project in modal , immediately display the project's desc and update corresponding teachers list
+  afterModalProjectSelected(): void {
+    // update the project description
+    this.projectDescForSearch = this.projectsForSearch.find(value => value.id === this.searchFilter.project_id).desc;
+    // clear the previous teachers list before updating
+    this.teachersForSearch = [];
+    // update and display the corresponding teachers list by project ID
+    const project_id = this.searchFilter.project_id;
+    this.data.getTeachersByProject(project_id); // (observer mode)
   }
   // only when project selected, active project information tag
   activeProjectInfo(): boolean {
@@ -382,9 +367,23 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     }
     return false;
   }
-
-  // when press "Search" button in modal, immediately get all of the teacher's courses
   searchCoursesByTeacher(): void {
+    const teacher_id = this.searchFilter.teacher_id;
+    this.subscriptionCourses = this.data.getCoursesByTeacher(teacher_id, 'teacher')
+      .subscribe(courses => {
+        // hide course information of others and replace by "Taken"
+        for ( const course of courses){
+          if (course.student_id !== this.person_id) {
+            course.title = 'Taken';
+          }
+        };
+        // then update courses
+        this.courses = courses;
+        this.displayBookingCalendar();
+      });
+  }
+  // when press "Search" button in modal, immediately get all of the teacher's courses
+  afterModalSearchButtonPressed(): void {
     // firstly check whether the search input is valid
     if (this.searchFilter.project_id === '' || this.searchFilter.teacher_id === '') {
       jQuery('#invalidSearchInputModal').modal('show');
@@ -393,38 +392,21 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     // secondly update projects and teachers
     this.projects = this.projectsForSearch;
     this.teachers = this.teachersForSearch;
+    // then update searching label in navbar ( type, project, teacher )
+    this.changeSearchLabel();
 
-    // search courses by teacher
+    // immediately update corresponding modules or units of current project
+    this.modulesUnits = this.projects.find(value => value.id === this.projectIdForLabel).modulesUnits;
+
+    // search the corresponding courses by teacher ID
     const teacher_id = this.searchFilter.teacher_id;
-    this.subscriptionCourses = this.data.getCoursesByPerson(teacher_id, 'teacher')
-      .subscribe(courses => {
-        // hide course information of others and replace by "Taken"
-        for ( const course of courses){
-          if (course.student_id !== this.person_id) {
-            course.title = 'Taken';
-          }
-        }
-
-        // finally update courses
-        this.courses = courses;
-
-        // after update courses,immediately update search label ( project -> teacher )
-        this.changeSearchLabel();
-
-        // update corresponding modules or units of current project
-        this.modulesUnits = this.projects.find(value => value.id === this.projectIdForLabel).modulesUnits;
-
-        // invoke displayBookingCalendar() method
-        this.displayBookingCalendar();
-      });
-
+    this.data.getCoursesByTeacher(teacher_id, 'teacher'); // observer mode
   }
 
-  // update search label ( project -> teacher )
+  // update searching label in navbar ( type, project, teacher )
   changeSearchLabel(): void {
     this.projectIdForLabel = this.searchFilter.project_id;
     this.teacherIdForLabel = this.searchFilter.teacher_id;
-
     this.projectNameForLabel = this.projectsForSearch.find(value => value.id === this.projectIdForLabel).name;
     this.projectTypeForLabel = this.projectsForSearch.find(value => value.id === this.projectIdForLabel).type;
     this.projectDescForLabel = this.projectDescForSearch;
@@ -438,7 +420,6 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     }
     return false;
   }
-
 
   displayBookingCalendar() {
     console.log('Updating Calendar...');
@@ -494,7 +475,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     }
   }
 
-  // only when project selected, active project information tag
+  // only when ModuleUnit selected in Booking Modal, active ModuleUnit information tag
   activeModuleUnitInfo(): boolean {
     if (this.newCourse.desc !== '' && this.newCourse.title !== '') {
       return true;
@@ -502,7 +483,7 @@ export class Registration4Component implements OnInit, AfterViewInit  {
     return false;
   }
 
-  // When the select moduleUnit, immediately update the course desc
+  // When moduleUnit selected in Booking Modal, immediately update the ModuleUnit ( course ) desc
   updateModuleUnitTitleAndDesc() {
     this.newCourse.title = this.modulesUnits.find(value => value.id === this.moduleUnitIdForLabel).title;
     this.newCourse.desc = this.modulesUnits.find(value => value.id === this.moduleUnitIdForLabel).desc;
@@ -524,22 +505,6 @@ export class Registration4Component implements OnInit, AfterViewInit  {
       .catch(error => console.log(error.body));
     this.newCourse = Object.assign({}, DEFAULT_COURSE);
   }
-
-
-  searchMyBookedCourses(): void {
-    this.myBookedCourses = [];
-    this.subscriptionMyBookedCourses = this.data.getCoursesByPerson(this.person_id, 'student')
-      .subscribe(courses => {
-        this.myBookedCourses = courses;
-        this.courses = this.myBookedCourses;
-
-        // invoke displayMyCoursesCalendar() method
-        this.displayMyCoursesCalendar();
-
-      });
-  }
-
-
 
   displayMyCoursesCalendar() {
 

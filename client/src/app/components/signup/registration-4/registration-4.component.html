@@ -33,7 +33,7 @@
                     <button type="button" class="{{'btn btn-' + bookingButtonColor}}" *ngIf="activeBookingButton()" (click)="bookingButtonClick()">
                       <span class ="glyphicon glyphicon-tag" arial-hidden="true"></span> Reservation
                     </button>
-                    <button type="button" class="btn btn-blue-white" (click)="initSearchModal()" data-toggle="modal" data-target="#exampleModalSearchCourse">
+                    <button type="button" class="btn btn-blue-white" (click)="afterNavBarSearchButtonPressed()" data-toggle="modal" data-target="#exampleModalSearchCourse">
                       <span class ="glyphicon glyphicon-search" arial-hidden="true"></span> Search
                     </button>
 
@@ -66,7 +66,7 @@
                     <div class="form-group">
                       <label for="project"><span class ="glyphicon glyphicon-blackboard" arial-hidden="true"></span> Project</label>
                       <select class="form-control" id="project"
-                              name="project" [(ngModel)]="searchFilter.project_id" (change)="searchTeachersByProject()">
+                              name="project" [(ngModel)]="searchFilter.project_id" (change)="afterModalProjectSelected()">
                         <option *ngFor="let projectForSearch of projectsForSearch" [value]="projectForSearch.id">
                           {{projectForSearch.name}}
                         </option>
@@ -92,7 +92,7 @@
                 <!--Cancel or Search-->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="submit" class="btn btn-info" data-dismiss="modal" (click)="searchCoursesByTeacher()" >Search</button>
+                  <button type="submit" class="btn btn-info" data-dismiss="modal" (click)="afterModalSearchButtonPressed()" >Search</button>
                 </div>
               </div>
             </div>

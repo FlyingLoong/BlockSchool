@@ -152,15 +152,11 @@ var getProjectsByPerson = function (person_id, role) {
                     contact: {tel: "", wechat: ""}
                 });
                 newPerson.save();
+                console.log("OK! New person document (projects and courses document) added.");
                 resolve(newPerson);
-                // console.log(" New Person Added !");
-                // console.log(newPerson);
             } else if (count === 1) {
                 Person.findOne({id: person_id}, function (err, person) {
                     if (person) {
-                        // console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                        // console.log(person);
-                        // console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         resolve(person.projects);
                     } else {
                         reject(err);
@@ -177,9 +173,6 @@ var getTeachersByProject = function (project_id) {
     return new Promise((resolve,reject) => {
             Person.find({role: "teacher", projects: {$elemMatch: {id: project_id}}},function (err, persons) {
             if (persons) {
-                // console.log("getTeachersByProject() - Count teachers: ");
-                // console.log(persons.length);
-                // console.log(persons);
                 resolve(persons);
             } else {
                 reject(err);
@@ -337,15 +330,11 @@ var getCoursesByPerson = function (person_id, role) {
                     contact: {tel: "", wechat: ""}
                 });
                 newPerson.save();
+                console.log("OK! New person document (projects and courses document) added.");
                 resolve(newPerson);
-                // console.log(" New Person Added !");
-                // console.log(newPerson);
             } else if (count === 1) {
                 Person.findOne({id: person_id}, function (err, person) {
                     if (person) {
-                        // console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-                        // console.log(person);
-                        // console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         resolve(person.courses);
                     } else {
                         reject(err);
@@ -359,7 +348,6 @@ var getCoursesByPerson = function (person_id, role) {
 };
 
 var addCourse = function (newCourse) {
-    console.log("server-side: personService : addCourse()");
     newCourse.id = "" + uuidV4();
     return new Promise((resolve, reject) => {
             //  check out whether the course time taken before the server execute push and save operation.
@@ -375,7 +363,7 @@ var addCourse = function (newCourse) {
                     if (person) {
                         person.courses.push(newCourse);
                         person.save();
-                        console.log("The course has been added into teacher's profile.");
+                        console.log("Ok! The course has been added into teacher's profile.");
                     } else {
                         reject(err);
                     }
@@ -402,8 +390,6 @@ var addCourse = function (newCourse) {
 
 
 var removeCourse = function (removingCourse) {
-    console.log("server-side: personService : removeCourse()");
-
     return new Promise((resolve, reject) => {
             // remove course from corresponding student
             Person.update({id: removingCourse.student_id},{ $pull: { "courses" : { id: removingCourse.id } } }, function(err,ok){

@@ -15,17 +15,13 @@ const PROFILE_SIGN_UP_ROUTES: Routes = [
     path: 'registration-2',
     component: Registration2Component
   },
-  // {
-    // path: 'registration-3',
-    // component: Registration3Component
-  // },
   {
-    path: 'registration-4',
-    component: Registration4Component
+    path: 'registration-3',
+    component: Registration3Component
   },
   {
     path: 'myCourse',
-    component: Registration4Component
+    component: Registration3Component
   },
   {
     path: '**',

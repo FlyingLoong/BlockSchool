@@ -10,6 +10,7 @@ import { AuthZeroService } from './services/auth-zero.service';
 import { ScheduleService } from './services/schedule.service';
 import { SignupService } from './services/signup.service';
 import { DataService } from './services/data.service';
+import { ModalService } from './services/modal.service';
 
 // import { CalendarComponent } from 'angular2-fullcalendar/src/calendar/calendar';
 
@@ -52,8 +53,8 @@ import { ProfileComponent } from './components/profile/profile.component';
       useClass: AuthService
     },
     {
-      provide:"authZero",
-      useClass:AuthZeroService},
+      provide: 'authZero',
+      useClass: AuthZeroService },
     {
       provide: 'schedule',
       useClass: ScheduleService
@@ -64,6 +65,9 @@ import { ProfileComponent } from './components/profile/profile.component';
     },
     { provide: 'data',
       useClass: DataService
+    },
+    { provide: 'modal',
+      useClass: ModalService
     }
   ],
   bootstrap: [AppComponent]

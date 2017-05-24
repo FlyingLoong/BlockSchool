@@ -44,7 +44,7 @@ var addUser = function (user) {
                         childInterests: user.childInterest
                     });
                     newUser.save();
-                    console.log(" New User Profile Added !");
+                    console.log("Ok! New user profile document added.");
                     resolve(count);
                 } else if (count >= 1) {
                     console.log("The email has been registered!");
@@ -63,8 +63,8 @@ var getProfileByEmail = function (user_email) {
     return new Promise((resolve,reject) => {
             User.findOne({email: user_email}, function (err, user) {
             if (user) {
-                console.log("get user");
-                console.log(user);
+                console.log("Ok! Got the user's profile.");
+                // console.log(user); //debug
                 resolve(user);
             } else {
                 reject(err);

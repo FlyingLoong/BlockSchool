@@ -109,9 +109,6 @@ export class AuthZeroService {
   }
 
   public login() {
-    // print location.href (entire path)
-    console.log('location.href: ' + location.href);
-
     // Call the show method to display the widget.
     this.lock.show({
       flashMessage: {

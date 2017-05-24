@@ -39,15 +39,17 @@ export class AuthService {
   }
 
   getUserProfileByEmail(user_email: string): Observable<User> {
-    this.http.get(`api/v1/search/profile/email/${user_email}`)
-      .toPromise()
-      .then((res: Response) => {
-        this.userProfileSource.next(res.json());
-      })
-      .catch(this.handleError);
-
+    if (user_email !== '' ) {
+      this.http.get(`api/v1/search/profile/email/${user_email}`)
+        .toPromise()
+        .then((res: Response) => {
+          this.userProfileSource.next(res.json());
+        })
+        .catch(this.handleError);
+    } else {
+      console.log('Still can not access project ID!');
+    }
     return this.userProfileSource.asObservable();
-
   }
 
 

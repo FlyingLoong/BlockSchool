@@ -1,4 +1,26 @@
 .signUp-container {
-  margin-top: 25px;
+  margin-top: 10px;
   background: transparent;
+}
+
+.navbar {
+  background-color: transparent;
+  background: transparent;
+  border-color: transparent;
+}
+
+.navbar-left {
+  margin-right: 0px;
+}
+
+.btn-blue-white {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #5bc0de
+}
+
+.btn-blue-white:active,.btn-blue-white:hover {
+  background-color: #ffffff;
+  border-color: #5bc0de;
+  color: #5bc0de
 }

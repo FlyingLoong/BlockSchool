@@ -9,49 +9,69 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class DataService {
-
+  private myBookedCoursesSource = new BehaviorSubject<Course[]>([]);
   private coursesSource = new BehaviorSubject<Course[]>([]);
   private projectsSource = new BehaviorSubject<Project[]>([]);
   private teachersSource = new BehaviorSubject<Person[]>([]);
 
   constructor(private http: Http) { }
-
-
-
   getProjectsByPerson(person_id: string, role: string): Observable<Project[]> {
-    this.http.get(`api/v1/search/projects/${role}/${person_id}`)
-      .toPromise()
-      .then((res: Response) => {
-        this.projectsSource.next(res.json());
-      })
-      .catch(this.handleError);
-
+    if (person_id !== '') {
+      this.http.get(`api/v1/search/projects/${role}/${person_id}`)
+        .toPromise()
+        .then((res: Response) => {
+          this.projectsSource.next(res.json());
+        })
+        .catch(this.handleError);
+    } else {
+      console.log('Still can not access person ID!');
+    }
     return this.projectsSource.asObservable();
   }
 
   getTeachersByProject(project_id: string): Observable<Person[]> {
-    this.http.get(`api/v1/search/teachers/project/${project_id}`)
-      .toPromise()
-      .then((res: Response) => {
-        this.teachersSource.next(res.json());
-      })
-      .catch(this.handleError);
+    if (project_id !== '') {
+      this.http.get(`api/v1/search/teachers/project/${project_id}`)
+        .toPromise()
+        .then((res: Response) => {
+          this.teachersSource.next(res.json());
+        })
+        .catch(this.handleError);
+    } else {
+      console.log('Still can not access project ID!');
+    }
 
     return this.teachersSource.asObservable();
 
   }
 
-  getCoursesByPerson(person_id: string, role: string): Observable<Course[]> {
-    this.http.get(`api/v1/search/courses/${role}/${person_id}`)
-      .toPromise()
-      .then((res: Response) => {
-        this.coursesSource.next(res.json());
-      })
-      .catch(this.handleError);
-
-    return this.coursesSource.asObservable();
+  getMyBookedCoursesByStudent(person_id: string, role: string): Observable<Course[]> {
+    if (person_id !== '') {
+      this.http.get(`api/v1/search/courses/${role}/${person_id}`)
+        .toPromise()
+        .then((res: Response) => {
+          this.myBookedCoursesSource.next(res.json());
+        })
+        .catch(this.handleError);
+    } else {
+      console.log('Still can not access person ID!');
+    }
+    return this.myBookedCoursesSource.asObservable();
   }
 
+  getCoursesByTeacher(person_id: string, role: string): Observable<Course[]> {
+    if (person_id !== '') {
+      this.http.get(`api/v1/search/courses/${role}/${person_id}`)
+        .toPromise()
+        .then((res: Response) => {
+          this.coursesSource.next(res.json());
+        })
+        .catch(this.handleError);
+    } else {
+      console.log('Still can not access person ID!');
+    }
+    return this.coursesSource.asObservable();
+  }
   checkTimeNotTaken(start_unix: number, end_unix: number, courses: Course[]): boolean {
     let isTaken = false;
     for (const course of courses){
@@ -77,7 +97,8 @@ export class DataService {
     return this.http.post(`api/v1/booking/course/${role}/${person_id}`, course, headers)
       .toPromise()
       .then((res: Response) => {
-        this.getCoursesByPerson(course.teacher_id, role);
+        // update the courses and calendar
+        this.getCoursesByTeacher(course.teacher_id, role);
         return res.json();
       })
       .catch(this.handleError);
@@ -88,7 +109,8 @@ export class DataService {
     return this.http.post(`api/v1/removing/course/${role}/${person_id}`, course, headers)
       .toPromise()
       .then((res: Response) => {
-        this.getCoursesByPerson(course.teacher_id, 'teacher');
+        // update the courses and calendar
+        this.getCoursesByTeacher(course.teacher_id, 'teacher');
         return res.json();
       })
       .catch(this.handleError);
