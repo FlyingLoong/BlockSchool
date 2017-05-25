@@ -34,7 +34,7 @@ export class Registration2Component implements OnInit {
 
 
   nextStep(): void {
-    // console.log("user.email is " + this.auth.user.email);
+    console.log('nextStep()');
     this.auth.user.parentName = this.userInfo.parentName;
     this.auth.user.relationship = this.userInfo.relationship;
     this.auth.user.childName = this.userInfo.childName;
@@ -43,7 +43,8 @@ export class Registration2Component implements OnInit {
     this.auth.user.childBirthday = moment(this.userInfo.childBirthday, 'YYYY-MM-DD');
     this.auth.user.childInterest = this.userInfo.childInterest;
 
-    this.auth.addNewUser()
+    this.auth.updateUserProfile()
+      /*
               .then ( count => {
                 // console.log('count' + count); // Debug
                 if (count === 0) {
@@ -54,6 +55,13 @@ export class Registration2Component implements OnInit {
                 };
               })
               .catch ( error => console.log(error.body) );
+      */
+
+      .then((ok) => {
+        console.log('The user profile has been updated');
+        this._router.navigate(['/signUp/registration-3']);
+      })
+      .catch(error => console.log(error.body));
 
     this.signUp.setProcessStatus('step3');
   }

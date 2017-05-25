@@ -31,7 +31,7 @@ export class AuthService {
 
   constructor(private http: Http) { }
 
-  addNewUser(): Promise<User> {
+  updateUserProfile(): Promise<User> {
     const headers = new Headers({'content-type': 'application/json'});
     return this.http.post('/api/v1/users', this.user, headers).toPromise()
                         .then((res: Response) => { return res.json(); })
@@ -47,7 +47,7 @@ export class AuthService {
         })
         .catch(this.handleError);
     } else {
-      console.log('Still can not access project ID!');
+      // console.log('Still can not access project ID!');
     }
     return this.userProfileSource.asObservable();
   }

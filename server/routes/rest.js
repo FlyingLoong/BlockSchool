@@ -9,10 +9,14 @@ var jsonParser = bodyParser.json();
 router.get("/home", function(req, res) {});
 
 router.post("/users", jsonParser, function(req, res) {
-    // console.log("Get the add user request!");  //Debug output
-    authService.addUser(req.body)
-        .then(function(user){res.json(user);},
-            function(error){res.status(400).send("The email has been registered!")})
+    // console.log("Get the update user profile request!");  //Debug output
+    authService.updateUserProfile(req.body)
+        .then(function (ok) {
+            console.log("The user's profile has been updated for you.");
+            res.json(ok);
+        }, function (error) {
+            res.status(400).send("Sorry, Failed to update the user's profile.");
+        });
 });
 
 router.get("/search/projects/student/:id", function(req,res){

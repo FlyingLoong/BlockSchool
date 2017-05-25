@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import 'fullcalendar';
 import * as $ from 'jquery';
@@ -53,7 +53,7 @@ const DEFAULT_USER_PROFILE: User = Object.freeze({
   templateUrl: './registration-3.component.html',
   styleUrls: ['./registration-3.component.css']
 })
-export class Registration3Component implements OnInit, AfterViewInit  {
+export class Registration3Component implements OnInit, OnDestroy, AfterViewInit  {
 
   person_email = '';
   person_id = '';
@@ -102,6 +102,8 @@ export class Registration3Component implements OnInit, AfterViewInit  {
 
   myBookedCourses: Course[] = [];
   subscriptionMyBookedCourses: Subscription;
+  // for unsubscription use
+  subscriptionsArray: Subscription[] = [];
 
   currentView: any;
 
@@ -134,20 +136,43 @@ export class Registration3Component implements OnInit, AfterViewInit  {
   constructor( @Inject('data') private data, @Inject('auth') private auth,  @Inject('authZero') private authZero, @Inject('signUp') private signUp, private router: Router ) { }
 
   ngOnInit() {
+    console.log('registration-3 component');
     // get user profile
     this.person_email = '' + this.authZero.getProfile().email;
-    // subscribe in observer mode
+    // subscribe these subsctiptions below in observer pattern and
     this.searchUserProfileByEmail();
     this.searchMyBookedCourses();
     this.searchMyProjects();
     this.searchCoursesByTeacher();
     this.searchTeachersByProject();
+    // push them into the subscriptions array
+    this.subscriptionsArray.push(this.subscriptionUserProfile);
+    this.subscriptionsArray.push(this.subscriptionMyBookedCourses);
+    this.subscriptionsArray.push(this.subscriptionProjects);
+    this.subscriptionsArray.push(this.subscriptionCourses);
+    this.subscriptionsArray.push(this.subscriptionTeachers);
+    // debug
+    console.log('subscriptionUserProfile: subscribed');
+    console.log('subscriptionMyBookedCourses: subscribed');
+    console.log('subscriptionProjects: subscribed');
+    console.log('subscriptionCourses: subscribed');
+    console.log('subscriptionTeachers: subscribed');
     this.signUp.setProcessStatus('step3');
   }
 
   ngAfterViewInit() {
     // load an empty calendar
     this.courseCalendar();
+  }
+
+  ngOnDestroy() {
+    // unsubscribe when this component destroyed
+    for (const subscription of this.subscriptionsArray){
+      if (subscription) {
+        subscription.unsubscribe();
+      };
+    }
+    console.log('All subscriptions: unsubscribed');
   }
 
   courseCalendar(): void {
@@ -297,8 +322,6 @@ export class Registration3Component implements OnInit, AfterViewInit  {
         this.person_name = this.userProfile.childName;
         this.person_id = '' + this.userProfile.id;
         this.person_role = 'student';
-        // automatically create people course profile in mLab
-        this.data.getMyBookedCoursesByStudent(this.person_id, 'student'); // (observer mode)
       });
   }
 

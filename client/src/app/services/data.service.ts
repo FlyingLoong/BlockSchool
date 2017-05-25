@@ -24,7 +24,7 @@ export class DataService {
         })
         .catch(this.handleError);
     } else {
-      console.log('Still can not access person ID!');
+      // console.log('Still can not access person ID!');
     }
     return this.projectsSource.asObservable();
   }
@@ -38,7 +38,7 @@ export class DataService {
         })
         .catch(this.handleError);
     } else {
-      console.log('Still can not access project ID!');
+      // console.log('Still can not access project ID!');
     }
 
     return this.teachersSource.asObservable();
@@ -54,7 +54,7 @@ export class DataService {
         })
         .catch(this.handleError);
     } else {
-      console.log('Still can not access person ID!');
+      // console.log('Still can not access person ID!');
     }
     return this.myBookedCoursesSource.asObservable();
   }
@@ -68,7 +68,7 @@ export class DataService {
         })
         .catch(this.handleError);
     } else {
-      console.log('Still can not access person ID!');
+      // console.log('Still can not access person ID!');
     }
     return this.coursesSource.asObservable();
   }
