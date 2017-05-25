@@ -58,8 +58,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   searchUserProfileByEmail(): void {
     this.subscriptionUserProfile = this.auth.getUserProfileByEmail(this.email)
       .subscribe(profile => {
+        console.log('profile from mLab');
+        console.log(profile);
         profile.childBirthday = moment(profile.childBirthday).format('YYYY-MM-DD');
         this.userProfile = profile;
+        console.log('this.userProfile for html');
+        console.log(this.userProfile);
         console.log('Got the profile.');
       });
   }

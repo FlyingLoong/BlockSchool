@@ -10,7 +10,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   username = '';
   subscriptionUsername: Subscription;
-
   activeNavBarMyCourseButtonState = false;
   subscriptionChangeActiveState: Subscription;
 

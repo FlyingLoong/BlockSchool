@@ -163,6 +163,10 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
   ngAfterViewInit() {
     // load an empty calendar
     this.courseCalendar();
+    // show my booked courses
+    // show loader
+    this.showLoader();
+    this.data.getMyBookedCoursesByStudent(this.person_id, 'student');
   }
 
   ngOnDestroy() {
@@ -324,6 +328,11 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
         this.person_role = 'student';
       });
   }
+  afterNavBarMyCoursesPressed() {
+    // show loader
+    this.showLoader();
+    this.data.getMyBookedCoursesByStudent(this.person_id, 'student');
+  }
 
   searchMyBookedCourses(): void {
     this.myBookedCourses = [];
@@ -420,6 +429,8 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
     // immediately update corresponding modules or units of current project
     this.modulesUnits = this.projects.find(value => value.id === this.projectIdForLabel).modulesUnits;
 
+    // show loader
+    this.showLoader();
     // search the corresponding courses by teacher ID
     const teacher_id = this.searchFilter.teacher_id;
     this.data.getCoursesByTeacher(teacher_id, 'teacher'); // observer mode
@@ -452,6 +463,8 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
     // 1.destroy the fullCalendar
     // 2.create the new fullCalendar
     $('#calendar').fullCalendar('destroy');
+    // hide loader and show calendar
+    this.hideLoader();
     this.courseCalendar();
 
     // clear all events before updating
@@ -518,7 +531,8 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
       jQuery('#invalidBookingInputModal').modal('show');
       return;
     }
-
+    // show loader
+    this.showLoader();
     // secondly book this course
     this.data.bookCourseForPerson(this.newCourse, 'student', this.person_id)
       .then((course) => {
@@ -541,8 +555,9 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
     // 1.destroy the fullCalendar
     // 2.create the new fullCalendar
     $('#calendar').fullCalendar('destroy');
+    // hide loader and show calendar
+    this.hideLoader();
     this.courseCalendar();
-
     // clear all events before updating
     $('#calendar').fullCalendar( 'removeEvents');
     // add new events on Calendar
@@ -566,6 +581,8 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
 
   // when press "Yes" button in "cancelBookedCourse" modal
   removeCourse() {
+    // show loader
+    this.showLoader();
     const courseRemoving = this.courses.find(value => (value.id === this.courseIdRemoving));
     this.data.removeCourseForPerson(courseRemoving, 'student', this.person_id)
       .then((ok) => {
@@ -594,4 +611,14 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
     });
   }
 
+  // show loader
+  showLoader() {
+    $('#loader').css('display', 'inherit');
+    $('#myDiv').css('display', 'none');
+  }
+  // hide loader
+  hideLoader() {
+    $('#loader').css('display', 'none');
+    $('#myDiv').css('display', 'inherit');
+  }
 }

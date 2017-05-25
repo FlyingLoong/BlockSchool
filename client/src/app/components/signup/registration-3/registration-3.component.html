@@ -27,7 +27,7 @@
               <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-fullCalendar">
                 <ul class="nav navbar-nav navbar-left">
 
-                  <button type="button" class="btn btn-blue-white" (click)="searchMyBookedCourses()">
+                  <button type="button" class="btn btn-blue-white" (click)="afterNavBarMyCoursesPressed()">
                     <span class ="glyphicon glyphicon-ok-circle" arial-hidden="true"></span> My Course
                   </button>
                   <button type="button" class="{{'btn btn-' + bookingButtonColor}}" *ngIf="activeBookingButton()" (click)="bookingButtonClick()">
@@ -222,8 +222,12 @@
               </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
-          <!-- calendar -->
-          <div id='calendar'></div>
+          <!-- loader -->
+          <div style="display:none;" id='loader'></div>
+          <div id="myDiv">
+            <!-- calendar -->
+            <div id='calendar'></div>
+          </div>
         </div>
       </div>
       <!--

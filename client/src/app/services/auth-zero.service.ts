@@ -166,7 +166,7 @@ export class AuthZeroService {
         .then((res: Response) => {
           this.checkUserInfoCompleteSource.next(true);
         })
-        .catch((e) => {
+        .catch((error) => {
           this.checkUserInfoCompleteSource.next(false);
         });
     };

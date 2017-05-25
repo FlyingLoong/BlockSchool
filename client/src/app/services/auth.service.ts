@@ -43,16 +43,15 @@ export class AuthService {
       this.http.get(`api/v1/search/profile/email/${user_email}`)
         .toPromise()
         .then((res: Response) => {
+          console.log('profile from mLab !!!!!!!!');
           this.userProfileSource.next(res.json());
         })
         .catch(this.handleError);
     } else {
-      // console.log('Still can not access project ID!');
+      console.log('Still can not access project ID!');
     }
     return this.userProfileSource.asObservable();
   }
-
-
   // error handler
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);

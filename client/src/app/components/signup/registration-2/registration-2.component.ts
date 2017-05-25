@@ -44,19 +44,6 @@ export class Registration2Component implements OnInit {
     this.auth.user.childInterest = this.userInfo.childInterest;
 
     this.auth.updateUserProfile()
-      /*
-              .then ( count => {
-                // console.log('count' + count); // Debug
-                if (count === 0) {
-                  console.log('User added');
-                  this._router.navigate(['/signUp/registration-3']);
-                }else if (count >= 1) {
-                  console.log('The email has been registered!');
-                };
-              })
-              .catch ( error => console.log(error.body) );
-      */
-
       .then((ok) => {
         console.log('The user profile has been updated');
         this._router.navigate(['/signUp/registration-3']);
