@@ -19,14 +19,12 @@ export class SignupComponent implements OnInit, OnDestroy {
   ngOnInit() {
     // subscribe the process status of completion of user's info
     this.getProcessStatus();
-    console.log('subscriptionProcessStatus: subscribed');
   }
 
   ngOnDestroy() {
     // unsubscribe when this component destroyed
     if (this.subscriptionProcessStatus) {
       this.subscriptionProcessStatus.unsubscribe();
-      console.log('subscriptionProcessStatus: unsubscribed');
     }
   }
 

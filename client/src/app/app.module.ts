@@ -20,6 +20,7 @@ import { Registration2Component } from './components/signup/registration-2/regis
 import { Registration3Component } from './components/signup/registration-3/registration-3.component';
 import { SignupComponent } from './components/signup/signup/signup.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { DateRangePickDirective } from './directives/date-range-pick.directive';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     Registration2Component,
     Registration3Component,
     SignupComponent,
-    ProfileComponent
+    ProfileComponent,
+    DateRangePickDirective
   ],
   imports: [
     BrowserModule,

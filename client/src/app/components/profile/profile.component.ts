@@ -15,7 +15,7 @@ const DEFAULT_USER_PROFILE: User = Object.freeze({
   childAge: '',
   childGender: '',
   childBirthday: null,
-  childInterest: ''
+  childInterests: ''
 });
 
 @Component({
@@ -42,7 +42,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     } else { console.log('Failed to get profile!'); }
     // subscribe the user's profile
     this.searchUserProfileByEmail();
-    console.log('subscriptionUserProfile: subscribed');
   }
 
   ngOnDestroy() {
@@ -50,7 +49,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     if (this.subscriptionUserProfile) {
       this.subscriptionUserProfile.unsubscribe();
-      console.log('subscriptionUserProfile: unsubscribed');
     }
   }
 
@@ -58,13 +56,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   searchUserProfileByEmail(): void {
     this.subscriptionUserProfile = this.auth.getUserProfileByEmail(this.email)
       .subscribe(profile => {
-        console.log('profile from mLab');
-        console.log(profile);
+        if (profile.childBirthday) {
         profile.childBirthday = moment(profile.childBirthday).format('YYYY-MM-DD');
+        }
+        if (profile.childGender === 'M') {
+          profile.childGender = 'Boy';
+        } else if (profile.childGender === 'F') {
+          profile.childGender = 'Girl';
+        }
         this.userProfile = profile;
-        console.log('this.userProfile for html');
-        console.log(this.userProfile);
-        console.log('Got the profile.');
       });
   }
 

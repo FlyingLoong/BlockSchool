@@ -26,11 +26,11 @@
         </div>
         <div class="form-group">
           <label for="childBirthday">Child Birthday</label>
-          <input type="date" class="form-control" id="childBirthday" name="childBirthday" required [(ngModel)]="userInfo.childBirthday">
+          <input appDateRangePick (selected)="dateSelected($event)" [options]="pickerOptions" type="submit" class="form-control" id="childBirthday" name="childBirthday" [value]="birthday">
         </div>
         <div class="form-group">
-          <label for="childInterest">Child Interest</label>
-          <textarea class="form-control" id="childInterest" name="childInterest" required [(ngModel)]="userInfo.childInterest"></textarea>
+          <label for="childInterests">Child Interests</label>
+          <textarea class="form-control" id="childInterests" name="childInterests" required [(ngModel)]="userInfo.childInterests"></textarea>
         </div>
         <span class="submit-button"><button type="submit" class="btn btn-info" (click)="nextStep()">Next Step</button></span>
       </form>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-navbar',
@@ -19,17 +19,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
     // subscribe the user's name and the result of checkout whether user's profile exists
     this.getUsername();
     this.subscribeChangeActiveState();
+    console.log('authZero.authenticated(');
   }
   ngOnDestroy() {
     // unsubscribe when this component destroyed
     if (this.subscriptionUsername) {
       this.subscriptionUsername.unsubscribe();
-      console.log('subscriptionUsername: unsubscribed');
     }
 
     if (this.subscriptionChangeActiveState) {
       this.subscriptionChangeActiveState.unsubscribe();
-      console.log('subscriptionChangeActiveState: unsubscribed');
     }
   }
   login(): void {

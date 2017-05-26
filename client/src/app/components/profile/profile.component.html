@@ -52,7 +52,7 @@
       <div class="form-group">
         <label for="childGender">Child Gender</label>
         <input type="text" class="form-control" id="childGender"
-               name="childGender" disabled [value]=" userProfile.childGender === 'F' ? 'Boy' : 'Girl' ">
+               name="childGender" disabled [value]="userProfile.childGender">
       </div>
       <div class="form-group">
         <label for="childBirthday">Child Birthday</label>
@@ -60,9 +60,9 @@
                name="childBirthday" disabled [value]="userProfile.childBirthday">
       </div>
       <div class="form-group">
-        <label for="childInterest">Child Interest</label>
-        <input type="text" class="form-control" id="childInterest"
-               name="childInterest" disabled [value]="userProfile.childInterest">
+        <label for="childInterests">Child Interest</label>
+        <input type="text" class="form-control" id="childInterests"
+               name="childInterests" disabled [value]="userProfile.childInterests">
       </div>
     </div>
     <div id="password" class="tab-pane fade">

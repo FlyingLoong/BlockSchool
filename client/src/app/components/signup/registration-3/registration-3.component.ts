@@ -45,7 +45,7 @@ const DEFAULT_USER_PROFILE: User = Object.freeze({
   childAge: '',
   childGender: '',
   childBirthday: null,
-  childInterest: ''
+  childInterests: ''
 });
 
 @Component({
@@ -136,9 +136,6 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
   constructor( @Inject('data') private data, @Inject('auth') private auth,  @Inject('authZero') private authZero, @Inject('signUp') private signUp, private router: Router ) { }
 
   ngOnInit() {
-    console.log('registration-3 component');
-    // get user profile
-    this.person_email = '' + this.authZero.getProfile().email;
     // subscribe these subsctiptions below in observer pattern and
     this.searchUserProfileByEmail();
     this.searchMyBookedCourses();
@@ -151,22 +148,19 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
     this.subscriptionsArray.push(this.subscriptionProjects);
     this.subscriptionsArray.push(this.subscriptionCourses);
     this.subscriptionsArray.push(this.subscriptionTeachers);
-    // debug
-    console.log('subscriptionUserProfile: subscribed');
-    console.log('subscriptionMyBookedCourses: subscribed');
-    console.log('subscriptionProjects: subscribed');
-    console.log('subscriptionCourses: subscribed');
-    console.log('subscriptionTeachers: subscribed');
+    // get user profile
+    this.person_email = '' + this.authZero.getProfile().email;
+    // update flow css
     this.signUp.setProcessStatus('step3');
   }
 
   ngAfterViewInit() {
     // load an empty calendar
     this.courseCalendar();
-    // show my booked courses
+    // get the user profile from mLab, then load my booked courses by id : profile -> id -> my booked courses
     // show loader
     this.showLoader();
-    this.data.getMyBookedCoursesByStudent(this.person_id, 'student');
+    this.auth.getUserProfileByEmail(this.person_email);
   }
 
   ngOnDestroy() {
@@ -176,7 +170,7 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
         subscription.unsubscribe();
       };
     }
-    console.log('All subscriptions: unsubscribed');
+    // console.log('All subscriptions: unsubscribed'); //debug
   }
 
   courseCalendar(): void {
@@ -326,6 +320,8 @@ export class Registration3Component implements OnInit, OnDestroy, AfterViewInit 
         this.person_name = this.userProfile.childName;
         this.person_id = '' + this.userProfile.id;
         this.person_role = 'student';
+        // load my booked courses by user id
+        this.data.getMyBookedCoursesByStudent(this.person_id, 'student');
       });
   }
   afterNavBarMyCoursesPressed() {

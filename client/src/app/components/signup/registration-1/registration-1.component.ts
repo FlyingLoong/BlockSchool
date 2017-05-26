@@ -13,7 +13,7 @@ const DEFAULT_USER: User = Object.freeze({
   childAge: '',
   childGender: '',
   childBirthday: null,
-  childInterest: ''
+  childInterests: ''
 });
 
 @Component({
@@ -28,7 +28,9 @@ export class Registration1Component implements OnInit {
   constructor(@Inject('auth') private auth, @Inject('authZero') private authZero, @Inject('signUp') private signUp, private _router: Router) { }
 
   ngOnInit() {
+    // get the user email
     this.userInfo.email = this.authZero.getProfile().email;
+    // update flow css
     this.signUp.setProcessStatus('step1');
   }
 

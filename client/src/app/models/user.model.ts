@@ -9,5 +9,5 @@ export class User {
   childAge: string;
   childGender: string;
   childBirthday: any;
-  childInterest: string;
+  childInterests: string;
 }

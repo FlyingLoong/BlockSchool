@@ -6,5 +6,5 @@ export class Project {
   grade: string;
   desc: string;
   type: string;
-  modulesUnits:[ModuleUnit];
+  modulesUnits: [ModuleUnit];
 }
